@@ -429,8 +429,8 @@
       </div>
 
       <div class="summary">
-        <div class="glass sum-card give"><div class="glow"></div><div class="label">You'll Give</div><div class="amt" id="dash-give-amt">₨ 0</div><div class="trend">&nbsp;</div></div>
-        <div class="glass sum-card get"><div class="glow"></div><div class="label">You'll Get</div><div class="amt" id="dash-get-amt">₨ 0</div><div class="trend">&nbsp;</div></div>
+        <div class="glass sum-card give"><div class="glow"></div><div class="label" data-i18n="label_you_give">You Give</div><div class="amt" id="dash-give-amt">₨ 0</div><div class="trend">&nbsp;</div></div>
+        <div class="glass sum-card get"><div class="glow"></div><div class="label" data-i18n="label_you_got">You Got</div><div class="amt" id="dash-get-amt">₨ 0</div><div class="trend">&nbsp;</div></div>
       </div>
 
       <div class="quick-actions">
@@ -465,11 +465,11 @@
       <button class="lang-toggle" onclick="openAddCustomerFresh()">+ Add</button>
     </header>
     <main>
-      <div class="glass search" onclick="void(0)">🔍 <input id="cust-search" class="search-input" type="text" placeholder="Search customers..." oninput="renderCustomersList()"></div>
+      <div class="glass search" style="display:flex; align-items:center; gap:8px;">🔍 <input id="cust-search" class="search-input" type="text" placeholder="Search customers..." oninput="renderCustomersList()" style="flex:1;"> <button onclick="pickFromContacts()" style="background:none; border:none; font-size:18px; cursor:pointer;" title="Pick from device contacts">📇</button></div>
       <div class="filter-row">
         <button class="filter-chip active" onclick="filterCust('all', this)">All <span class="fc-count" id="cust-count-all">0</span></button>
-        <button class="filter-chip" onclick="filterCust('get', this)">You'll Get</button>
-        <button class="filter-chip" onclick="filterCust('give', this)">You'll Give</button>
+        <button class="filter-chip" onclick="filterCust('get', this)" data-i18n="label_you_got">You Got</button>
+        <button class="filter-chip" onclick="filterCust('give', this)" data-i18n="label_you_give">You Give</button>
       </div>
 
       <div id="customers-list"></div>
@@ -556,7 +556,7 @@
       <div class="section-title">Entries<button class="add-small" onclick="switchView('newentry')">+ Add</button></div>
       <div class="glass report-card" style="padding:0 16px;" id="ledger-entries"></div>
       </div>
-      <button class="btn btn-outline" onclick="alert('Sending WhatsApp reminder with payment link...')" style="margin-top:16px;">📤 Send reminder on WhatsApp</button>
+      <button class="btn btn-outline" onclick="whatsappCustomer()" style="margin-top:16px;">📤 Send reminder on WhatsApp</button>
     </main>
   </div>
 
@@ -648,6 +648,7 @@
         <div class="setting-row"><span data-i18n="settings_voice">Voice entry</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
         <div class="setting-row"><span data-i18n="settings_whatsapp">Auto WhatsApp reminders</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
         <div class="setting-row"><span data-i18n="settings_offline">Offline mode</span><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+        <div class="setting-row"><span data-i18n="settings_reminders">Enable reminder notifications</span><div class="switch" id="notif-switch" onclick="onNotifSwitchToggle(this)"></div></div>
       </div>
       <div class="glass report-card">
         <div class="card-eyebrow">Account</div>
@@ -655,6 +656,7 @@
         <div class="setting-row" onclick="backupToDrive()" style="cursor:pointer;"><span data-i18n="settings_backup">Backup to Google Drive</span><span>›</span></div>
         <div class="setting-row" onclick="restoreFromDrive()" style="cursor:pointer;"><span data-i18n="settings_restore">Restore from Google Drive</span><span>›</span></div>
         <div class="setting-row" onclick="changePin()" style="cursor:pointer;"><span data-i18n="settings_changepin">Change PIN</span><span>›</span></div>
+        <div class="setting-row" onclick="checkForUpdates(true)" style="cursor:pointer;"><span data-i18n="settings_checkupdate">Check for updates</span><span>›</span></div>
       </div>
       <button class="btn btn-outline" onclick="switchView('login')">Log out</button>
     </main>
@@ -757,6 +759,7 @@ async function backupToDrive(){
   });
   if(!res.ok){ console.error('Drive backup failed', await res.text()); alert('Backup failed. Check console.'); return; }
   alert('Backed up to Google Drive ✅');
+  fireNotification('Backup complete', 'Your ledger was backed up to Google Drive.');
 }
 
 async function restoreFromDrive(){
@@ -769,6 +772,7 @@ async function restoreFromDrive(){
   if(!res.ok){ console.error('Drive restore failed', await res.text()); return; }
   const data = await res.json();
   applyRestoredData(data);
+  fireNotification('Data restored', 'Your ledger was restored from Google Drive.');
 }
 
 // ----- Real status bar (clock + battery, no more fake "9:41 100%") -----
@@ -935,13 +939,13 @@ function exportReportPdf(){
   lines.push('');
   let give=0, get=0;
   KP.customers.forEach(c=>{ const b=customerBalance(c); if(b>=0) get+=b; else give+=-b; });
-  lines.push("Total You'll Get: " + money(get));
-  lines.push("Total You'll Give: " + money(give));
+  lines.push("Total You Got: " + money(get));
+  lines.push("Total You Give: " + money(give));
   lines.push('');
   lines.push('Customer breakdown:');
   KP.customers.forEach(c=>{
     const b = customerBalance(c);
-    lines.push('  ' + c.name + ' - ' + (b>=0? "You'll get " : "You'll give ") + money(b));
+    lines.push('  ' + c.name + ' - ' + (b>=0? "You got " : "You give ") + money(b));
   });
   if(!KP.customers.length) lines.push('  No customers yet.');
 
@@ -972,7 +976,7 @@ const I18N = {
         settings_language:'Language', settings_currency:'Currency', settings_voice:'Voice entry',
         settings_whatsapp:'Auto WhatsApp reminders', settings_offline:'Offline mode', settings_bizprofile:'Business profile',
         settings_backup:'Backup to Google Drive', settings_restore:'Restore from Google Drive', settings_changepin:'Change PIN',
-        auth_title_login:'Welcome back', auth_subtitle_login:'Login to your business khata', auth_title_signup:'Create your khata', auth_subtitle_signup:'Set up your business account', auth_btn_login:'Login', auth_btn_create:'Create account', auth_toggle_to_signup:'Create new business account', auth_toggle_to_login:'Already have an account? Login' },
+        auth_title_login:'Welcome back', auth_subtitle_login:'Login to your business khata', auth_title_signup:'Create your khata', auth_subtitle_signup:'Set up your business account', auth_btn_login:'Login', auth_btn_create:'Create account', auth_toggle_to_signup:'Create new business account', auth_toggle_to_login:'Already have an account? Login', label_you_give:'You Give', label_you_got:'You Got', settings_reminders:'Enable reminder notifications', settings_checkupdate:'Check for updates' },
   ur: { nav_home:'ہوم', nav_customers:'کسٹمرز', nav_reports:'رپورٹس', nav_business:'کاروبار', nav_settings:'ترتیبات',
         title_customers:'کسٹمرز', title_new_entry:'نئی انٹری', title_reports:'رپورٹس', title_business:'کاروبار اور عملہ',
         title_notifications:'اطلاعات', title_settings:'ترتیبات',
@@ -980,7 +984,7 @@ const I18N = {
         settings_language:'زبان', settings_currency:'کرنسی', settings_voice:'وائس انٹری',
         settings_whatsapp:'خودکار واٹس ایپ یاد دہانی', settings_offline:'آف لائن موڈ', settings_bizprofile:'کاروباری پروفائل',
         settings_backup:'گوگل ڈرائیو بیک اپ', settings_restore:'گوگل ڈرائیو سے بحال کریں', settings_changepin:'پن تبدیل کریں',
-        auth_title_login:'خوش آمدید', auth_subtitle_login:'اپنے کاروباری کھاتے میں لاگ ان کریں', auth_title_signup:'اپنا کھاتہ بنائیں', auth_subtitle_signup:'اپنا کاروباری اکاؤنٹ سیٹ اپ کریں', auth_btn_login:'لاگ ان', auth_btn_create:'اکاؤنٹ بنائیں', auth_toggle_to_signup:'نیا کاروباری اکاؤنٹ بنائیں', auth_toggle_to_login:'پہلے سے اکاؤنٹ ہے؟ لاگ ان کریں' },
+        auth_title_login:'خوش آمدید', auth_subtitle_login:'اپنے کاروباری کھاتے میں لاگ ان کریں', auth_title_signup:'اپنا کھاتہ بنائیں', auth_subtitle_signup:'اپنا کاروباری اکاؤنٹ سیٹ اپ کریں', auth_btn_login:'لاگ ان', auth_btn_create:'اکاؤنٹ بنائیں', auth_toggle_to_signup:'نیا کاروباری اکاؤنٹ بنائیں', auth_toggle_to_login:'پہلے سے اکاؤنٹ ہے؟ لاگ ان کریں', label_you_give:'آپ نے دیا', label_you_got:'آپ کو ملا', settings_reminders:'یاد دہانی کی اطلاعات فعال کریں', settings_checkupdate:'اپڈیٹ چیک کریں' },
   hi: { nav_home:'होम', nav_customers:'ग्राहक', nav_reports:'रिपोर्ट', nav_business:'व्यवसाय', nav_settings:'सेटिंग्स',
         title_customers:'ग्राहक', title_new_entry:'नई एंट्री', title_reports:'रिपोर्ट', title_business:'व्यवसाय और स्टाफ',
         title_notifications:'सूचनाएं', title_settings:'सेटिंग्स',
@@ -988,7 +992,7 @@ const I18N = {
         settings_language:'भाषा', settings_currency:'मुद्रा', settings_voice:'वॉइस एंट्री',
         settings_whatsapp:'स्वचालित व्हाट्सएप रिमाइंडर', settings_offline:'ऑफ़लाइन मोड', settings_bizprofile:'व्यवसाय प्रोफ़ाइल',
         settings_backup:'गूगल ड्राइव बैकअप', settings_restore:'गूगल ड्राइव से पुनर्स्थापित करें', settings_changepin:'पिन बदलें',
-        auth_title_login:'वापसी पर स्वागत है', auth_subtitle_login:'अपने व्यापार खाते में लॉगिन करें', auth_title_signup:'अपना खाता बनाएं', auth_subtitle_signup:'अपना व्यवसाय खाता सेट करें', auth_btn_login:'लॉगिन', auth_btn_create:'खाता बनाएं', auth_toggle_to_signup:'नया व्यवसाय खाता बनाएं', auth_toggle_to_login:'पहले से खाता है? लॉगिन करें' },
+        auth_title_login:'वापसी पर स्वागत है', auth_subtitle_login:'अपने व्यापार खाते में लॉगिन करें', auth_title_signup:'अपना खाता बनाएं', auth_subtitle_signup:'अपना व्यवसाय खाता सेट करें', auth_btn_login:'लॉगिन', auth_btn_create:'खाता बनाएं', auth_toggle_to_signup:'नया व्यवसाय खाता बनाएं', auth_toggle_to_login:'पहले से खाता है? लॉगिन करें', label_you_give:'आपने दिया', label_you_got:'आपको मिला', settings_reminders:'रिमाइंडर नोटिफिकेशन सक्षम करें', settings_checkupdate:'अपडेट जांचें' },
   ar: { nav_home:'الرئيسية', nav_customers:'العملاء', nav_reports:'التقارير', nav_business:'الأعمال', nav_settings:'الإعدادات',
         title_customers:'العملاء', title_new_entry:'إدخال جديد', title_reports:'التقارير', title_business:'الأعمال والموظفون',
         title_notifications:'الإشعارات', title_settings:'الإعدادات',
@@ -996,7 +1000,7 @@ const I18N = {
         settings_language:'اللغة', settings_currency:'العملة', settings_voice:'الإدخال الصوتي',
         settings_whatsapp:'تذكيرات واتساب التلقائية', settings_offline:'وضع عدم الاتصال', settings_bizprofile:'ملف الأعمال',
         settings_backup:'نسخ احتياطي إلى جوجل درايف', settings_restore:'استعادة من جوجل درايف', settings_changepin:'تغيير الرمز',
-        auth_title_login:'مرحباً بعودتك', auth_subtitle_login:'سجّل الدخول إلى دفتر حساباتك', auth_title_signup:'أنشئ دفتر حساباتك', auth_subtitle_signup:'قم بإعداد حساب عملك', auth_btn_login:'تسجيل الدخول', auth_btn_create:'إنشاء حساب', auth_toggle_to_signup:'إنشاء حساب عمل جديد', auth_toggle_to_login:'لديك حساب بالفعل؟ سجّل الدخول' },
+        auth_title_login:'مرحباً بعودتك', auth_subtitle_login:'سجّل الدخول إلى دفتر حساباتك', auth_title_signup:'أنشئ دفتر حساباتك', auth_subtitle_signup:'قم بإعداد حساب عملك', auth_btn_login:'تسجيل الدخول', auth_btn_create:'إنشاء حساب', auth_toggle_to_signup:'إنشاء حساب عمل جديد', auth_toggle_to_login:'لديك حساب بالفعل؟ سجّل الدخول', label_you_give:'أعطيت', label_you_got:'استلمت', settings_reminders:'تفعيل إشعارات التذكير', settings_checkupdate:'التحقق من وجود تحديثات' },
   es: { nav_home:'Inicio', nav_customers:'Clientes', nav_reports:'Informes', nav_business:'Negocio', nav_settings:'Ajustes',
         title_customers:'Clientes', title_new_entry:'Nueva entrada', title_reports:'Informes', title_business:'Negocio y personal',
         title_notifications:'Notificaciones', title_settings:'Ajustes',
@@ -1004,7 +1008,7 @@ const I18N = {
         settings_language:'Idioma', settings_currency:'Moneda', settings_voice:'Entrada de voz',
         settings_whatsapp:'Recordatorios automaticos de WhatsApp', settings_offline:'Modo sin conexion', settings_bizprofile:'Perfil del negocio',
         settings_backup:'Copia de seguridad en Google Drive', settings_restore:'Restaurar desde Google Drive', settings_changepin:'Cambiar PIN',
-        auth_title_login:'Bienvenido de nuevo', auth_subtitle_login:'Inicia sesion en tu khata de negocio', auth_title_signup:'Crea tu khata', auth_subtitle_signup:'Configura tu cuenta de negocio', auth_btn_login:'Iniciar sesion', auth_btn_create:'Crear cuenta', auth_toggle_to_signup:'Crear nueva cuenta de negocio', auth_toggle_to_login:'Ya tienes cuenta? Inicia sesion' },
+        auth_title_login:'Bienvenido de nuevo', auth_subtitle_login:'Inicia sesion en tu khata de negocio', auth_title_signup:'Crea tu khata', auth_subtitle_signup:'Configura tu cuenta de negocio', auth_btn_login:'Iniciar sesion', auth_btn_create:'Crear cuenta', auth_toggle_to_signup:'Crear nueva cuenta de negocio', auth_toggle_to_login:'Ya tienes cuenta? Inicia sesion', label_you_give:'Tu diste', label_you_got:'Tu recibiste', settings_reminders:'Activar notificaciones de recordatorio', settings_checkupdate:'Buscar actualizaciones' },
   fr: { nav_home:'Accueil', nav_customers:'Clients', nav_reports:'Rapports', nav_business:'Entreprise', nav_settings:'Parametres',
         title_customers:'Clients', title_new_entry:'Nouvelle entree', title_reports:'Rapports', title_business:'Entreprise et personnel',
         title_notifications:'Notifications', title_settings:'Parametres',
@@ -1012,7 +1016,7 @@ const I18N = {
         settings_language:'Langue', settings_currency:'Devise', settings_voice:'Saisie vocale',
         settings_whatsapp:'Rappels WhatsApp automatiques', settings_offline:'Mode hors ligne', settings_bizprofile:"Profil de l'entreprise",
         settings_backup:'Sauvegarder sur Google Drive', settings_restore:'Restaurer depuis Google Drive', settings_changepin:'Changer le PIN',
-        auth_title_login:'Content de vous revoir', auth_subtitle_login:'Connectez-vous a votre khata professionnel', auth_title_signup:'Creez votre khata', auth_subtitle_signup:'Configurez votre compte professionnel', auth_btn_login:'Connexion', auth_btn_create:'Creer un compte', auth_toggle_to_signup:'Creer un nouveau compte professionnel', auth_toggle_to_login:'Deja un compte ? Connexion' },
+        auth_title_login:'Content de vous revoir', auth_subtitle_login:'Connectez-vous a votre khata professionnel', auth_title_signup:'Creez votre khata', auth_subtitle_signup:'Configurez votre compte professionnel', auth_btn_login:'Connexion', auth_btn_create:'Creer un compte', auth_toggle_to_signup:'Creer un nouveau compte professionnel', auth_toggle_to_login:'Deja un compte ? Connexion', label_you_give:'Vous avez donne', label_you_got:'Vous avez recu', settings_reminders:'Activer les notifications de rappel', settings_checkupdate:'Verifier les mises a jour' },
   zh: { nav_home:'首页', nav_customers:'客户', nav_reports:'报表', nav_business:'商户', nav_settings:'设置',
         title_customers:'客户', title_new_entry:'新记录', title_reports:'报表', title_business:'商户与员工',
         title_notifications:'通知', title_settings:'设置',
@@ -1020,7 +1024,7 @@ const I18N = {
         settings_language:'语言', settings_currency:'货币', settings_voice:'语音输入',
         settings_whatsapp:'自动WhatsApp提醒', settings_offline:'离线模式', settings_bizprofile:'商户资料',
         settings_backup:'备份到谷歌云端硬盘', settings_restore:'从谷歌云端硬盘恢复', settings_changepin:'更改密码',
-        auth_title_login:'欢迎回来', auth_subtitle_login:'登录您的商户账本', auth_title_signup:'创建您的账本', auth_subtitle_signup:'设置您的商户账户', auth_btn_login:'登录', auth_btn_create:'创建账户', auth_toggle_to_signup:'创建新商户账户', auth_toggle_to_login:'已有账户？登录' },
+        auth_title_login:'欢迎回来', auth_subtitle_login:'登录您的商户账本', auth_title_signup:'创建您的账本', auth_subtitle_signup:'设置您的商户账户', auth_btn_login:'登录', auth_btn_create:'创建账户', auth_toggle_to_signup:'创建新商户账户', auth_toggle_to_login:'已有账户？登录', label_you_give:'你给出', label_you_got:'你收到', settings_reminders:'启用提醒通知', settings_checkupdate:'检查更新' },
   pt: { nav_home:'Inicio', nav_customers:'Clientes', nav_reports:'Relatorios', nav_business:'Negocio', nav_settings:'Config.',
         title_customers:'Clientes', title_new_entry:'Novo lancamento', title_reports:'Relatorios', title_business:'Negocio e equipe',
         title_notifications:'Notificacoes', title_settings:'Configuracoes',
@@ -1028,7 +1032,7 @@ const I18N = {
         settings_language:'Idioma', settings_currency:'Moeda', settings_voice:'Entrada por voz',
         settings_whatsapp:'Lembretes automaticos do WhatsApp', settings_offline:'Modo offline', settings_bizprofile:'Perfil do negocio',
         settings_backup:'Backup no Google Drive', settings_restore:'Restaurar do Google Drive', settings_changepin:'Alterar PIN',
-        auth_title_login:'Bem-vindo de volta', auth_subtitle_login:'Entre no seu khata comercial', auth_title_signup:'Crie seu khata', auth_subtitle_signup:'Configure sua conta comercial', auth_btn_login:'Entrar', auth_btn_create:'Criar conta', auth_toggle_to_signup:'Criar nova conta comercial', auth_toggle_to_login:'Ja tem uma conta? Entrar' },
+        auth_title_login:'Bem-vindo de volta', auth_subtitle_login:'Entre no seu khata comercial', auth_title_signup:'Crie seu khata', auth_subtitle_signup:'Configure sua conta comercial', auth_btn_login:'Entrar', auth_btn_create:'Criar conta', auth_toggle_to_signup:'Criar nova conta comercial', auth_toggle_to_login:'Ja tem uma conta? Entrar', label_you_give:'Voce deu', label_you_got:'Voce recebeu', settings_reminders:'Ativar notificacoes de lembrete', settings_checkupdate:'Verificar atualizacoes' },
   bn: { nav_home:'হোম', nav_customers:'গ্রাহক', nav_reports:'রিপোর্ট', nav_business:'ব্যবসা', nav_settings:'সেটিংস',
         title_customers:'গ্রাহক', title_new_entry:'নতুন এন্ট্রি', title_reports:'রিপোর্ট', title_business:'ব্যবসা ও স্টাফ',
         title_notifications:'বিজ্ঞপ্তি', title_settings:'সেটিংস',
@@ -1036,7 +1040,7 @@ const I18N = {
         settings_language:'ভাষা', settings_currency:'মুদ্রা', settings_voice:'ভয়েস এন্ট্রি',
         settings_whatsapp:'স্বয়ংক্রিয় হোয়াটসঅ্যাপ রিমাইন্ডার', settings_offline:'অফলাইন মোড', settings_bizprofile:'ব্যবসার প্রোফাইল',
         settings_backup:'গুগল ড্রাইভে ব্যাকআপ', settings_restore:'গুগল ড্রাইভ থেকে পুনরুদ্ধার করুন', settings_changepin:'পিন পরিবর্তন করুন',
-        auth_title_login:'ফিরে আসার জন্য স্বাগতম', auth_subtitle_login:'আপনার ব্যবসার খাতায় লগইন করুন', auth_title_signup:'আপনার খাতা তৈরি করুন', auth_subtitle_signup:'আপনার ব্যবসার অ্যাকাউন্ট সেট আপ করুন', auth_btn_login:'লগইন', auth_btn_create:'অ্যাকাউন্ট তৈরি করুন', auth_toggle_to_signup:'নতুন ব্যবসার অ্যাকাউন্ট তৈরি করুন', auth_toggle_to_login:'আগে থেকেই অ্যাকাউন্ট আছে? লগইন করুন' },
+        auth_title_login:'ফিরে আসার জন্য স্বাগতম', auth_subtitle_login:'আপনার ব্যবসার খাতায় লগইন করুন', auth_title_signup:'আপনার খাতা তৈরি করুন', auth_subtitle_signup:'আপনার ব্যবসার অ্যাকাউন্ট সেট আপ করুন', auth_btn_login:'লগইন', auth_btn_create:'অ্যাকাউন্ট তৈরি করুন', auth_toggle_to_signup:'নতুন ব্যবসার অ্যাকাউন্ট তৈরি করুন', auth_toggle_to_login:'আগে থেকেই অ্যাকাউন্ট আছে? লগইন করুন', label_you_give:'আপনি দিয়েছেন', label_you_got:'আপনি পেয়েছেন', settings_reminders:'রিমাইন্ডার বিজ্ঞপ্তি সক্ষম করুন', settings_checkupdate:'আপডেট পরীক্ষা করুন' },
   ru: { nav_home:'Главная', nav_customers:'Клиенты', nav_reports:'Отчёты', nav_business:'Бизнес', nav_settings:'Настройки',
         title_customers:'Клиенты', title_new_entry:'Новая запись', title_reports:'Отчёты', title_business:'Бизнес и персонал',
         title_notifications:'Уведомления', title_settings:'Настройки',
@@ -1044,7 +1048,7 @@ const I18N = {
         settings_language:'Язык', settings_currency:'Валюта', settings_voice:'Голосовой ввод',
         settings_whatsapp:'Авто-напоминания WhatsApp', settings_offline:'Офлайн режим', settings_bizprofile:'Профиль бизнеса',
         settings_backup:'Резервная копия в Google Drive', settings_restore:'Восстановить из Google Drive', settings_changepin:'Сменить PIN',
-        auth_title_login:'С возвращением', auth_subtitle_login:'Войдите в свою бизнес-книгу', auth_title_signup:'Создайте свою книгу', auth_subtitle_signup:'Настройте свой бизнес-аккаунт', auth_btn_login:'Войти', auth_btn_create:'Создать аккаунт', auth_toggle_to_signup:'Создать новый бизнес-аккаунт', auth_toggle_to_login:'Уже есть аккаунт? Войти' }
+        auth_title_login:'С возвращением', auth_subtitle_login:'Войдите в свою бизнес-книгу', auth_title_signup:'Создайте свою книгу', auth_subtitle_signup:'Настройте свой бизнес-аккаунт', auth_btn_login:'Войти', auth_btn_create:'Создать аккаунт', auth_toggle_to_signup:'Создать новый бизнес-аккаунт', auth_toggle_to_login:'Уже есть аккаунт? Войти', label_you_give:'Вы отдали', label_you_got:'Вы получили', settings_reminders:'Включить уведомления-напоминания', settings_checkupdate:'Проверить обновления' }
 };
 const LANG_KEY = 'khataProLang';
 
@@ -1095,7 +1099,7 @@ function fmtDate(iso){
          d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
 }
 
-// Balance convention: positive = customer owes you (You'll Get). Negative = you owe them (You'll Give).
+// Balance convention: positive = customer owes you (You Got). Negative = you owe them (You Give).
 function customerBalance(c){
   let bal = c.openingType === 'owe_me' ? (c.opening||0) : -(c.opening||0);
   KP.entries.filter(e=>e.customerId===c.id).forEach(e=>{
@@ -1117,7 +1121,7 @@ function lastEntryLabel(customerId){
 function custCardHTML(c, delay){
   const bal = customerBalance(c);
   const type = bal >= 0 ? 'get' : 'give';
-  const label = bal >= 0 ? "You'll get" : "You'll give";
+  const label = bal >= 0 ? "You got" : "You give";
   return `<div class="glass cust ${type}" data-type="${type}" style="animation-delay:${delay}s" onclick="openLedger('${c.id}')">
     <div class="icon3d violet">${initials(c.name)}</div>
     <div class="cust-info"><div class="name">${c.name}</div><div class="meta">${lastEntryLabel(c.id)}</div></div>
@@ -1515,7 +1519,133 @@ function toggleLang(){ urdu = !urdu; }
 renderAll();
 animateEntries();
 initStatusBar();
+// ===== Real device contacts picker (customers screen) =====
+function getContactsPlugin(){
+  return (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Contacts) || null;
+}
+
+async function pickFromContacts(){
+  const Contacts = getContactsPlugin();
+  if(!Contacts){
+    alert('Picking from contacts is only available in the built Android app, not in a plain browser preview.');
+    return;
+  }
+  try{
+    const perm = await Contacts.requestPermissions();
+    if(perm.contacts !== 'granted'){
+      alert('Contacts permission was denied. Enable it in your phone Settings > Apps > Khata Pro > Permissions to pick contacts.');
+      return;
+    }
+    const result = await Contacts.pickContact({ projection: { name: true, phones: true } });
+    const contact = result && result.contact;
+    if(!contact) return;
+    const name = (contact.name && contact.name.display) || 'Unknown';
+    const phone = (contact.phones && contact.phones[0] && contact.phones[0].number) || '';
+
+    const existing = findCustomerByName(name);
+    if(existing){
+      openLedger(existing.id);
+      return;
+    }
+    // Not an existing customer yet — prefill Add Customer with their real contact info
+    editingCustomerId = null;
+    document.getElementById('ac-screen-title').textContent = 'Add Customer';
+    document.getElementById('ac-save-btn').textContent = 'Save Customer';
+    resetAddCustomerForm();
+    document.getElementById('ac-name').value = name;
+    document.getElementById('ac-phone').value = phone;
+    setOpenMode('give');
+    switchView('addcustomer');
+  }catch(e){
+    console.error('Contact pick failed or was cancelled', e);
+  }
+}
+
+// ===== Real local notifications (reminders, sync status, update checks) =====
+const APP_VERSION = '1.0.0';
+function getNotifPlugin(){
+  return (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) || null;
+}
+let notifPermissionGranted = false;
+
+async function ensureNotifPermission(){
+  const LN = getNotifPlugin();
+  if(!LN) return false;
+  try{
+    const check = await LN.checkPermissions();
+    if(check.display === 'granted'){ notifPermissionGranted = true; return true; }
+    const req = await LN.requestPermissions();
+    notifPermissionGranted = req.display === 'granted';
+    return notifPermissionGranted;
+  }catch(e){ console.error('Notification permission error', e); return false; }
+}
+
+let notifIdCounter = 5000;
+async function fireNotification(title, body){
+  const LN = getNotifPlugin();
+  if(!LN){ console.log('[notif fallback]', title, body); return; }
+  const ok = await ensureNotifPermission();
+  if(!ok) return;
+  try{
+    await LN.schedule({ notifications: [{
+      id: notifIdCounter++,
+      title, body,
+      schedule: { at: new Date(Date.now() + 500) }
+    }]});
+  }catch(e){ console.error('Failed to fire notification', e); }
+}
+
+async function toggleReminderNotifications(enabled){
+  const LN = getNotifPlugin();
+  if(!LN){ alert('Notifications are only available in the built Android app, not in a plain browser preview.'); return; }
+  if(enabled){
+    const ok = await ensureNotifPermission();
+    if(!ok){ alert('Notification permission was denied. Enable it in your phone Settings > Apps > Khata Pro > Notifications.'); return; }
+    try{
+      await LN.schedule({ notifications: [{
+        id: 9001,
+        title: 'Khata Pro reminder',
+        body: 'Check today\'s pending balances and follow up with customers.',
+        schedule: { on: { hour: 18, minute: 0 }, repeats: true }
+      }]});
+      localStorage.setItem('khataProRemindersOn', '1');
+    }catch(e){ console.error('Failed to schedule daily reminder', e); }
+  } else {
+    try{ await LN.cancel({ notifications: [{ id: 9001 }] }); }catch(e){}
+    localStorage.setItem('khataProRemindersOn', '0');
+  }
+}
+
+async function checkForUpdates(showNoUpdateAlert){
+  try{
+    const res = await fetch('https://raw.githubusercontent.com/pamficollectio1-wq/Khata-pro/main/version.json', { cache:'no-store' });
+    if(!res.ok) throw new Error('version check failed');
+    const data = await res.json();
+    if(data.version && data.version !== APP_VERSION){
+      await fireNotification('Update available', `Khata Pro ${data.version} is available (you have ${APP_VERSION}). Ask your developer for the new APK.`);
+      if(showNoUpdateAlert) alert(`A new version (${data.version}) is available. You're on ${APP_VERSION}.`);
+    } else if(showNoUpdateAlert){
+      alert("You're on the latest version (" + APP_VERSION + ").");
+    }
+  }catch(e){
+    if(showNoUpdateAlert) alert('Could not check for updates — needs an internet connection.');
+  }
+}
+
+function onNotifSwitchToggle(el){
+  const enabling = !el.classList.contains('on');
+  el.classList.toggle('on', enabling);
+  toggleReminderNotifications(enabling);
+}
+function restoreNotifSwitchState(){
+  const on = localStorage.getItem('khataProRemindersOn') === '1';
+  const el = document.getElementById('notif-switch');
+  if(el) el.classList.toggle('on', on);
+}
+
 initLanguage();
+restoreNotifSwitchState();
+checkForUpdates(false);
 </script>
 </body>
 </html>
