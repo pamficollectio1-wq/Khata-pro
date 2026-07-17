@@ -435,11 +435,11 @@
     </main>
     <button class="fab" onclick="switchView('newentry')"><span>+</span></button>
     <nav class="bottom glass">
-      <button class="active" data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span>Home</button>
-      <button data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span>Customers</button>
-      <button data-tab="reports" onclick="switchView('reports', this); animateBars();"><span class="ic"><span>📊</span></span>Reports</button>
-      <button data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span>Business</button>
-      <button data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span>Settings</button>
+      <button class="active" data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span><span data-i18n="nav_home">Home</span></button>
+      <button data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span><span data-i18n="nav_customers">Customers</span></button>
+      <button data-tab="reports" onclick="switchView('reports', this); animateBars();"><span class="ic"><span>📊</span></span><span data-i18n="nav_reports">Reports</span></button>
+      <button data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span><span data-i18n="nav_business">Business</span></button>
+      <button data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span><span data-i18n="nav_settings">Settings</span></button>
     </nav>
   </div>
 
@@ -447,7 +447,7 @@
   <div class="view" id="view-customers">
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top">
-      <div class="screen-title">Customers</div>
+      <div class="screen-title" data-i18n="title_customers">Customers</div>
       <button class="lang-toggle" onclick="openAddCustomerFresh()">+ Add</button>
     </header>
     <main>
@@ -462,11 +462,11 @@
     </main>
     <button class="fab" onclick="openAddCustomerFresh()"><span>+</span></button>
     <nav class="bottom glass">
-      <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span>Home</button>
-      <button class="active" data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span>Customers</button>
-      <button data-tab="reports" onclick="switchView('reports', this); animateBars();"><span class="ic"><span>📊</span></span>Reports</button>
-      <button data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span>Business</button>
-      <button data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span>Settings</button>
+      <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span><span data-i18n="nav_home">Home</span></button>
+      <button class="active" data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span><span data-i18n="nav_customers">Customers</span></button>
+      <button data-tab="reports" onclick="switchView('reports', this); animateBars();"><span class="ic"><span>📊</span></span><span data-i18n="nav_reports">Reports</span></button>
+      <button data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span><span data-i18n="nav_business">Business</span></button>
+      <button data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span><span data-i18n="nav_settings">Settings</span></button>
     </nav>
   </div>
 
@@ -487,7 +487,7 @@
         <button id="oc-get" onclick="setOpenMode('get')">I Owe Them</button>
       </div>
       <div class="field"><label>Notes (optional)</label><input id="ac-notes" type="text" placeholder="Shop area, category, etc."></div>
-      <button class="btn btn-primary" id="ac-save-btn" onclick="saveCustomer()">Save Customer</button>
+      <button class="btn btn-primary" id="ac-save-btn" onclick="saveCustomer()" data-i18n="btn_save_customer">Save Customer</button>
     </main>
   </div>
 
@@ -495,7 +495,7 @@
   <!-- 5. NEW ENTRY -->
   <div class="view" id="view-newentry">
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
-    <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title">New Entry</div></header>
+    <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title" data-i18n="title_new_entry">New Entry</div></header>
     <main>
       <div class="field"><label>Customer</label><input id="entry-customer" type="text" list="customer-list" placeholder="Search or type new customer name"></div>
       <datalist id="customer-list"></datalist>
@@ -510,7 +510,7 @@
       <div class="field"><label>Note (optional)</label><input id="entry-note" type="text" placeholder="e.g. Sofa set delivery"></div>
       <div class="field"><label>Date</label><input id="entry-date" type="text" readonly></div>
       <button class="mic" id="voice-entry-btn" style="width:100%; border-radius:16px; height:52px; margin-bottom:14px;" onclick="startVoiceEntry()">🎙 Speak this entry instead</button>
-      <button class="btn btn-primary" onclick="saveEntry()">Save Entry</button>
+      <button class="btn btn-primary" onclick="saveEntry()" data-i18n="btn_save_entry">Save Entry</button>
     </main>
   </div>
 
@@ -549,7 +549,7 @@
   <!-- 7. REPORTS -->
   <div class="view" id="view-reports">
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
-    <header class="top plain"><div class="screen-title">Reports</div></header>
+    <header class="top plain"><div class="screen-title" data-i18n="title_reports">Reports</div></header>
     <main>
       <div class="glass report-card">
         <div class="card-eyebrow">By customer (all-time)</div>
@@ -562,18 +562,18 @@
       <button class="btn btn-outline" onclick="exportReportPdf()">⬇ Export report (PDF)</button>
     </main>
     <nav class="bottom glass">
-      <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span>Home</button>
-      <button data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span>Customers</button>
-      <button class="active" data-tab="reports" onclick="switchView('reports', this)"><span class="ic"><span>📊</span></span>Reports</button>
-      <button data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span>Business</button>
-      <button data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span>Settings</button>
+      <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span><span data-i18n="nav_home">Home</span></button>
+      <button data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span><span data-i18n="nav_customers">Customers</span></button>
+      <button class="active" data-tab="reports" onclick="switchView('reports', this)"><span class="ic"><span>📊</span></span><span data-i18n="nav_reports">Reports</span></button>
+      <button data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span><span data-i18n="nav_business">Business</span></button>
+      <button data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span><span data-i18n="nav_settings">Settings</span></button>
     </nav>
   </div>
 
   <!-- 8. BUSINESS / STAFF -->
   <div class="view" id="view-business">
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
-    <header class="top plain"><div class="screen-title">Business &amp; Staff</div></header>
+    <header class="top plain"><div class="screen-title" data-i18n="title_business">Business &amp; Staff</div></header>
     <main>
       <div class="glass report-card">
         <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px;" id="biz-name-display">Your Business</div>
@@ -587,18 +587,18 @@
       </div>
     </main>
     <nav class="bottom glass">
-      <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span>Home</button>
-      <button data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span>Customers</button>
-      <button data-tab="reports" onclick="switchView('reports', this); animateBars();"><span class="ic"><span>📊</span></span>Reports</button>
-      <button class="active" data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span>Business</button>
-      <button data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span>Settings</button>
+      <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span><span data-i18n="nav_home">Home</span></button>
+      <button data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span><span data-i18n="nav_customers">Customers</span></button>
+      <button data-tab="reports" onclick="switchView('reports', this); animateBars();"><span class="ic"><span>📊</span></span><span data-i18n="nav_reports">Reports</span></button>
+      <button class="active" data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span><span data-i18n="nav_business">Business</span></button>
+      <button data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span><span data-i18n="nav_settings">Settings</span></button>
     </nav>
   </div>
 
   <!-- 9. NOTIFICATIONS -->
   <div class="view" id="view-notifications">
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
-    <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title">Notifications</div></header>
+    <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title" data-i18n="title_notifications">Notifications</div></header>
     <main>
       <div class="glass report-card" style="padding:6px 14px;">
         <div class="notif-row"><div class="icon3d red" style="width:36px;height:36px;border-radius:12px;font-size:15px;">⏰</div><div><div class="t">Rashid Motors payment overdue</div><div class="d">₨33,300 due 5 days ago</div></div></div>
@@ -612,31 +612,44 @@
   <!-- 10. SETTINGS -->
   <div class="view" id="view-settings">
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
-    <header class="top plain"><div class="screen-title">Settings</div></header>
+    <header class="top plain"><div class="screen-title" data-i18n="title_settings">Settings</div></header>
     <main>
       <div class="glass report-card">
         <div class="card-eyebrow">Preferences</div>
-        <div class="setting-row">Language<span style="color:var(--txt-dim);">English / اردو</span></div>
-        <div class="setting-row">Currency<span style="color:var(--txt-dim);">PKR ₨</span></div>
-        <div class="setting-row">Voice entry<div class="switch on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="setting-row">Auto WhatsApp reminders<div class="switch on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="setting-row">Offline mode<div class="switch" onclick="this.classList.toggle('on')"></div></div>
+        <div class="setting-row"><span data-i18n="settings_language">Language</span>
+          <select id="lang-select" onchange="setLanguage(this.value)" style="background:var(--glass); border:1px solid var(--glass-brd); border-radius:8px; padding:6px 8px; color:var(--txt); font-size:12.5px;">
+            <option value="en">English</option>
+            <option value="ur">اردو (Urdu)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="ar">العربية (Arabic)</option>
+            <option value="es">Español (Spanish)</option>
+            <option value="fr">Français (French)</option>
+            <option value="zh">中文 (Chinese)</option>
+            <option value="pt">Português (Portuguese)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+            <option value="ru">Русский (Russian)</option>
+          </select>
+        </div>
+        <div class="setting-row"><span data-i18n="settings_currency">Currency</span><span style="color:var(--txt-dim);">PKR ₨</span></div>
+        <div class="setting-row"><span data-i18n="settings_voice">Voice entry</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="setting-row"><span data-i18n="settings_whatsapp">Auto WhatsApp reminders</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="setting-row"><span data-i18n="settings_offline">Offline mode</span><div class="switch" onclick="this.classList.toggle('on')"></div></div>
       </div>
       <div class="glass report-card">
         <div class="card-eyebrow">Account</div>
-        <div class="setting-row" onclick="switchView('business')" style="cursor:pointer;">Business profile<span>›</span></div>
-        <div class="setting-row" onclick="backupToDrive()" style="cursor:pointer;">Backup to Google Drive<span>›</span></div>
-        <div class="setting-row" onclick="restoreFromDrive()" style="cursor:pointer;">Restore from Google Drive<span>›</span></div>
-        <div class="setting-row" onclick="changePin()" style="cursor:pointer;">Change PIN<span>›</span></div>
+        <div class="setting-row" onclick="switchView('business')" style="cursor:pointer;"><span data-i18n="settings_bizprofile">Business profile</span><span>›</span></div>
+        <div class="setting-row" onclick="backupToDrive()" style="cursor:pointer;"><span data-i18n="settings_backup">Backup to Google Drive</span><span>›</span></div>
+        <div class="setting-row" onclick="restoreFromDrive()" style="cursor:pointer;"><span data-i18n="settings_restore">Restore from Google Drive</span><span>›</span></div>
+        <div class="setting-row" onclick="changePin()" style="cursor:pointer;"><span data-i18n="settings_changepin">Change PIN</span><span>›</span></div>
       </div>
       <button class="btn btn-outline" onclick="switchView('login')">Log out</button>
     </main>
     <nav class="bottom glass">
-      <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span>Home</button>
-      <button data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span>Customers</button>
-      <button data-tab="reports" onclick="switchView('reports', this); animateBars();"><span class="ic"><span>📊</span></span>Reports</button>
-      <button data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span>Business</button>
-      <button class="active" data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span>Settings</button>
+      <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span><span data-i18n="nav_home">Home</span></button>
+      <button data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span><span data-i18n="nav_customers">Customers</span></button>
+      <button data-tab="reports" onclick="switchView('reports', this); animateBars();"><span class="ic"><span>📊</span></span><span data-i18n="nav_reports">Reports</span></button>
+      <button data-tab="business" onclick="switchView('business', this)"><span class="ic"><span>🏬</span></span><span data-i18n="nav_business">Business</span></button>
+      <button class="active" data-tab="settings" onclick="switchView('settings', this)"><span class="ic"><span>⚙️</span></span><span data-i18n="nav_settings">Settings</span></button>
     </nav>
   </div>
 
@@ -930,6 +943,103 @@ function exportReportPdf(){
   a.click();
   document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url), 5000);
+}
+
+// ----- Language switcher (real, applies to navigation/headers/key buttons).
+// Honest scope note: this translates the app's structural chrome (nav labels, screen
+// titles, settings labels, main save buttons) -- it does NOT translate customer names,
+// amounts, or dates you enter, since that's your own data, not app UI text.
+const RTL_LANGS = ['ur','ar'];
+const I18N = {
+  en: { nav_home:'Home', nav_customers:'Customers', nav_reports:'Reports', nav_business:'Business', nav_settings:'Settings',
+        title_customers:'Customers', title_new_entry:'New Entry', title_reports:'Reports', title_business:'Business & Staff',
+        title_notifications:'Notifications', title_settings:'Settings',
+        btn_save_customer:'Save Customer', btn_save_entry:'Save Entry',
+        settings_language:'Language', settings_currency:'Currency', settings_voice:'Voice entry',
+        settings_whatsapp:'Auto WhatsApp reminders', settings_offline:'Offline mode', settings_bizprofile:'Business profile',
+        settings_backup:'Backup to Google Drive', settings_restore:'Restore from Google Drive', settings_changepin:'Change PIN' },
+  ur: { nav_home:'ہوم', nav_customers:'کسٹمرز', nav_reports:'رپورٹس', nav_business:'کاروبار', nav_settings:'ترتیبات',
+        title_customers:'کسٹمرز', title_new_entry:'نئی انٹری', title_reports:'رپورٹس', title_business:'کاروبار اور عملہ',
+        title_notifications:'اطلاعات', title_settings:'ترتیبات',
+        btn_save_customer:'کسٹمر محفوظ کریں', btn_save_entry:'انٹری محفوظ کریں',
+        settings_language:'زبان', settings_currency:'کرنسی', settings_voice:'وائس انٹری',
+        settings_whatsapp:'خودکار واٹس ایپ یاد دہانی', settings_offline:'آف لائن موڈ', settings_bizprofile:'کاروباری پروفائل',
+        settings_backup:'گوگل ڈرائیو بیک اپ', settings_restore:'گوگل ڈرائیو سے بحال کریں', settings_changepin:'پن تبدیل کریں' },
+  hi: { nav_home:'होम', nav_customers:'ग्राहक', nav_reports:'रिपोर्ट', nav_business:'व्यवसाय', nav_settings:'सेटिंग्स',
+        title_customers:'ग्राहक', title_new_entry:'नई एंट्री', title_reports:'रिपोर्ट', title_business:'व्यवसाय और स्टाफ',
+        title_notifications:'सूचनाएं', title_settings:'सेटिंग्स',
+        btn_save_customer:'ग्राहक सहेजें', btn_save_entry:'एंट्री सहेजें',
+        settings_language:'भाषा', settings_currency:'मुद्रा', settings_voice:'वॉइस एंट्री',
+        settings_whatsapp:'स्वचालित व्हाट्सएप रिमाइंडर', settings_offline:'ऑफ़लाइन मोड', settings_bizprofile:'व्यवसाय प्रोफ़ाइल',
+        settings_backup:'गूगल ड्राइव बैकअप', settings_restore:'गूगल ड्राइव से पुनर्स्थापित करें', settings_changepin:'पिन बदलें' },
+  ar: { nav_home:'الرئيسية', nav_customers:'العملاء', nav_reports:'التقارير', nav_business:'الأعمال', nav_settings:'الإعدادات',
+        title_customers:'العملاء', title_new_entry:'إدخال جديد', title_reports:'التقارير', title_business:'الأعمال والموظفون',
+        title_notifications:'الإشعارات', title_settings:'الإعدادات',
+        btn_save_customer:'حفظ العميل', btn_save_entry:'حفظ الإدخال',
+        settings_language:'اللغة', settings_currency:'العملة', settings_voice:'الإدخال الصوتي',
+        settings_whatsapp:'تذكيرات واتساب التلقائية', settings_offline:'وضع عدم الاتصال', settings_bizprofile:'ملف الأعمال',
+        settings_backup:'نسخ احتياطي إلى جوجل درايف', settings_restore:'استعادة من جوجل درايف', settings_changepin:'تغيير الرمز' },
+  es: { nav_home:'Inicio', nav_customers:'Clientes', nav_reports:'Informes', nav_business:'Negocio', nav_settings:'Ajustes',
+        title_customers:'Clientes', title_new_entry:'Nueva entrada', title_reports:'Informes', title_business:'Negocio y personal',
+        title_notifications:'Notificaciones', title_settings:'Ajustes',
+        btn_save_customer:'Guardar cliente', btn_save_entry:'Guardar entrada',
+        settings_language:'Idioma', settings_currency:'Moneda', settings_voice:'Entrada de voz',
+        settings_whatsapp:'Recordatorios automaticos de WhatsApp', settings_offline:'Modo sin conexion', settings_bizprofile:'Perfil del negocio',
+        settings_backup:'Copia de seguridad en Google Drive', settings_restore:'Restaurar desde Google Drive', settings_changepin:'Cambiar PIN' },
+  fr: { nav_home:'Accueil', nav_customers:'Clients', nav_reports:'Rapports', nav_business:'Entreprise', nav_settings:'Parametres',
+        title_customers:'Clients', title_new_entry:'Nouvelle entree', title_reports:'Rapports', title_business:'Entreprise et personnel',
+        title_notifications:'Notifications', title_settings:'Parametres',
+        btn_save_customer:'Enregistrer le client', btn_save_entry:"Enregistrer l'entree",
+        settings_language:'Langue', settings_currency:'Devise', settings_voice:'Saisie vocale',
+        settings_whatsapp:'Rappels WhatsApp automatiques', settings_offline:'Mode hors ligne', settings_bizprofile:"Profil de l'entreprise",
+        settings_backup:'Sauvegarder sur Google Drive', settings_restore:'Restaurer depuis Google Drive', settings_changepin:'Changer le PIN' },
+  zh: { nav_home:'首页', nav_customers:'客户', nav_reports:'报表', nav_business:'商户', nav_settings:'设置',
+        title_customers:'客户', title_new_entry:'新记录', title_reports:'报表', title_business:'商户与员工',
+        title_notifications:'通知', title_settings:'设置',
+        btn_save_customer:'保存客户', btn_save_entry:'保存记录',
+        settings_language:'语言', settings_currency:'货币', settings_voice:'语音输入',
+        settings_whatsapp:'自动WhatsApp提醒', settings_offline:'离线模式', settings_bizprofile:'商户资料',
+        settings_backup:'备份到谷歌云端硬盘', settings_restore:'从谷歌云端硬盘恢复', settings_changepin:'更改密码' },
+  pt: { nav_home:'Inicio', nav_customers:'Clientes', nav_reports:'Relatorios', nav_business:'Negocio', nav_settings:'Config.',
+        title_customers:'Clientes', title_new_entry:'Novo lancamento', title_reports:'Relatorios', title_business:'Negocio e equipe',
+        title_notifications:'Notificacoes', title_settings:'Configuracoes',
+        btn_save_customer:'Salvar cliente', btn_save_entry:'Salvar lancamento',
+        settings_language:'Idioma', settings_currency:'Moeda', settings_voice:'Entrada por voz',
+        settings_whatsapp:'Lembretes automaticos do WhatsApp', settings_offline:'Modo offline', settings_bizprofile:'Perfil do negocio',
+        settings_backup:'Backup no Google Drive', settings_restore:'Restaurar do Google Drive', settings_changepin:'Alterar PIN' },
+  bn: { nav_home:'হোম', nav_customers:'গ্রাহক', nav_reports:'রিপোর্ট', nav_business:'ব্যবসা', nav_settings:'সেটিংস',
+        title_customers:'গ্রাহক', title_new_entry:'নতুন এন্ট্রি', title_reports:'রিপোর্ট', title_business:'ব্যবসা ও স্টাফ',
+        title_notifications:'বিজ্ঞপ্তি', title_settings:'সেটিংস',
+        btn_save_customer:'গ্রাহক সংরক্ষণ করুন', btn_save_entry:'এন্ট্রি সংরক্ষণ করুন',
+        settings_language:'ভাষা', settings_currency:'মুদ্রা', settings_voice:'ভয়েস এন্ট্রি',
+        settings_whatsapp:'স্বয়ংক্রিয় হোয়াটসঅ্যাপ রিমাইন্ডার', settings_offline:'অফলাইন মোড', settings_bizprofile:'ব্যবসার প্রোফাইল',
+        settings_backup:'গুগল ড্রাইভে ব্যাকআপ', settings_restore:'গুগল ড্রাইভ থেকে পুনরুদ্ধার করুন', settings_changepin:'পিন পরিবর্তন করুন' },
+  ru: { nav_home:'Главная', nav_customers:'Клиенты', nav_reports:'Отчёты', nav_business:'Бизнес', nav_settings:'Настройки',
+        title_customers:'Клиенты', title_new_entry:'Новая запись', title_reports:'Отчёты', title_business:'Бизнес и персонал',
+        title_notifications:'Уведомления', title_settings:'Настройки',
+        btn_save_customer:'Сохранить клиента', btn_save_entry:'Сохранить запись',
+        settings_language:'Язык', settings_currency:'Валюта', settings_voice:'Голосовой ввод',
+        settings_whatsapp:'Авто-напоминания WhatsApp', settings_offline:'Офлайн режим', settings_bizprofile:'Профиль бизнеса',
+        settings_backup:'Резервная копия в Google Drive', settings_restore:'Восстановить из Google Drive', settings_changepin:'Сменить PIN' }
+};
+const LANG_KEY = 'khataProLang';
+
+function setLanguage(code){
+  if(!I18N[code]) code = 'en';
+  localStorage.setItem(LANG_KEY, code);
+  const dict = I18N[code];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key]) el.textContent = dict[key];
+  });
+  document.documentElement.dir = RTL_LANGS.includes(code) ? 'rtl' : 'ltr';
+  const sel = document.getElementById('lang-select');
+  if(sel) sel.value = code;
+}
+
+function initLanguage(){
+  const saved = localStorage.getItem(LANG_KEY) || 'en';
+  setLanguage(saved);
 }
 
 // ===== Real local data store (source of truth — Drive backup mirrors this) =====
@@ -1375,6 +1485,7 @@ function toggleLang(){ urdu = !urdu; }
 renderAll();
 animateEntries();
 initStatusBar();
+initLanguage();
 </script>
 </body>
 </html>
