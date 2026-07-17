@@ -333,7 +333,7 @@
 
   <!-- 1. SPLASH -->
   <div class="view active" id="view-splash">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <div class="center-screen">
       <div class="logo-mark"><span class="letter">K</span></div>
       <h1>Khata<span style="background:linear-gradient(135deg,var(--violet),var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent;">Pro</span></h1>
@@ -344,7 +344,7 @@
 
   <!-- 2. ONBOARDING -->
   <div class="view" id="view-onboard1">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <div class="center-screen">
       <div class="icon3d violet spin" style="width:100px; height:100px; border-radius:32px; font-size:44px; margin-bottom:22px;">🎙️</div>
       <h1 style="font-size:21px;">Speak your entry</h1>
@@ -354,7 +354,7 @@
     </div>
   </div>
   <div class="view" id="view-onboard2">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <div class="center-screen">
       <div class="icon3d cyan float" style="width:100px; height:100px; border-radius:32px; font-size:44px; margin-bottom:22px;">🏬</div>
       <h1 style="font-size:21px;">Run multiple branches</h1>
@@ -364,7 +364,7 @@
     </div>
   </div>
   <div class="view" id="view-onboard3">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <div class="center-screen">
       <div class="icon3d gold float" style="width:100px; height:100px; border-radius:32px; font-size:44px; margin-bottom:22px;">🔔</div>
       <h1 style="font-size:21px;">Never miss a payment</h1>
@@ -376,7 +376,7 @@
 
   <!-- 3. LOGIN -->
   <div class="view" id="view-login">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <main style="padding-top:30px;">
       <div class="logo-mark" style="margin:0 auto 20px auto; width:76px; height:76px; font-size:32px; border-radius:22px;"><span class="letter">K</span></div>
       <div style="text-align:center; margin-bottom:26px;">
@@ -400,7 +400,7 @@
 
   <!-- 4. DASHBOARD -->
   <div class="view" id="view-dashboard">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top">
       <div class="brand"><div class="mark">khata<span>Pro</span></div><div class="pro-tag">PRO</div></div>
       <div style="display:flex; gap:10px; align-items:center;">
@@ -421,8 +421,8 @@
 
       <div class="quick-actions">
         <div class="qa-btn" onclick="switchView('newentry')"><div class="icon3d violet qa-ic">➕</div><span>New Entry</span></div>
-        <div class="qa-btn" onclick="switchView('addcustomer')"><div class="icon3d cyan qa-ic">🧑‍🤝‍🧑</div><span>Add Customer</span></div>
-        <div class="qa-btn" onclick="alert('Listening... say e.g. \'Ahmed gave 2000 rupees\'')"><div class="icon3d gold qa-ic">🎙️</div><span>Voice Entry</span></div>
+        <div class="qa-btn" onclick="openAddCustomerFresh()"><div class="icon3d cyan qa-ic">🧑‍🤝‍🧑</div><span>Add Customer</span></div>
+        <div class="qa-btn" onclick="switchView('newentry'); setTimeout(startVoiceEntry, 400);"><div class="icon3d gold qa-ic">🎙️</div><span>Voice Entry</span></div>
         <div class="qa-btn" onclick="switchView('reports'); animateBars();"><div class="icon3d green qa-ic">📊</div><span>Reports</span></div>
       </div>
 
@@ -445,10 +445,10 @@
 
   <!-- 4B. CUSTOMERS -->
   <div class="view" id="view-customers">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top">
       <div class="screen-title">Customers</div>
-      <button class="lang-toggle" onclick="switchView('addcustomer')">+ Add</button>
+      <button class="lang-toggle" onclick="openAddCustomerFresh()">+ Add</button>
     </header>
     <main>
       <div class="glass search" onclick="void(0)">🔍 <input id="cust-search" class="search-input" type="text" placeholder="Search customers..." oninput="renderCustomersList()"></div>
@@ -460,7 +460,7 @@
 
       <div id="customers-list"></div>
     </main>
-    <button class="fab" onclick="switchView('addcustomer')"><span>+</span></button>
+    <button class="fab" onclick="openAddCustomerFresh()"><span>+</span></button>
     <nav class="bottom glass">
       <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span>Home</button>
       <button class="active" data-tab="customers" onclick="switchView('customers', this)"><span class="ic"><span>👥</span></span>Customers</button>
@@ -472,8 +472,8 @@
 
   <!-- 4C. ADD CUSTOMER -->
   <div class="view" id="view-addcustomer">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
-    <header class="top plain"><button class="back" onclick="switchView('customers')">←</button><div class="screen-title">Add Customer</div></header>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
+    <header class="top plain"><button class="back" onclick="switchView('customers')">←</button><div class="screen-title" id="ac-screen-title">Add Customer</div></header>
     <main>
       <div class="avatar-picker">
         <div class="icon3d violet" style="width:76px; height:76px; border-radius:24px; font-size:28px; margin:0 auto;">🧑</div>
@@ -487,14 +487,14 @@
         <button id="oc-get" onclick="setOpenMode('get')">I Owe Them</button>
       </div>
       <div class="field"><label>Notes (optional)</label><input id="ac-notes" type="text" placeholder="Shop area, category, etc."></div>
-      <button class="btn btn-primary" onclick="saveCustomer()">Save Customer</button>
+      <button class="btn btn-primary" id="ac-save-btn" onclick="saveCustomer()">Save Customer</button>
     </main>
   </div>
 
 
   <!-- 5. NEW ENTRY -->
   <div class="view" id="view-newentry">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title">New Entry</div></header>
     <main>
       <div class="field"><label>Customer</label><input id="entry-customer" type="text" list="customer-list" placeholder="Search or type new customer name"></div>
@@ -509,20 +509,22 @@
       </div>
       <div class="field"><label>Note (optional)</label><input id="entry-note" type="text" placeholder="e.g. Sofa set delivery"></div>
       <div class="field"><label>Date</label><input id="entry-date" type="text" readonly></div>
-      <button class="mic" style="width:100%; border-radius:16px; height:52px; margin-bottom:14px;" onclick="alert('Listening... say the amount and reason')">🎙 Speak this entry instead</button>
+      <button class="mic" id="voice-entry-btn" style="width:100%; border-radius:16px; height:52px; margin-bottom:14px;" onclick="startVoiceEntry()">🎙 Speak this entry instead</button>
       <button class="btn btn-primary" onclick="saveEntry()">Save Entry</button>
     </main>
   </div>
 
   <!-- 6. LEDGER DETAIL -->
   <div class="view" id="view-ledger">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title" id="ledger-name">Customer</div></header>
     <main>
       <div class="ledger-contact">
         <div class="icon3d violet" style="width:52px;height:52px;border-radius:18px;font-size:20px;" id="ledger-avatar">AF</div>
         <div style="flex:1;"><div class="ledger-sub" id="ledger-sub">&nbsp;</div></div>
         <button class="contact-btn" onclick="callCustomer()">📞</button>
+        <button class="contact-btn wa" onclick="whatsappCustomer()">💬</button>
+        <button class="contact-btn" onclick="editCurrentCustomer()">✏️</button>
         <button class="contact-btn" onclick="deleteCurrentCustomer()" style="color:var(--red);">🗑️</button>
       </div>
       <div class="progress-ring">
@@ -546,7 +548,7 @@
 
   <!-- 7. REPORTS -->
   <div class="view" id="view-reports">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top plain"><div class="screen-title">Reports</div></header>
     <main>
       <div class="glass report-card">
@@ -557,7 +559,7 @@
         <div class="card-eyebrow">Collection reminders</div>
         <div id="report-reminders" style="font-size:12.5px; line-height:2;"></div>
       </div>
-      <button class="btn btn-outline" onclick="alert('PDF export needs a PDF library wired in — ask to add this next if you want it.')">⬇ Export monthly report (PDF)</button>
+      <button class="btn btn-outline" onclick="exportReportPdf()">⬇ Export report (PDF)</button>
     </main>
     <nav class="bottom glass">
       <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span>Home</button>
@@ -570,20 +572,18 @@
 
   <!-- 8. BUSINESS / STAFF -->
   <div class="view" id="view-business">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top plain"><div class="screen-title">Business &amp; Staff</div></header>
     <main>
       <div class="glass report-card">
-        <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px;">Al-Karam Trading Co.</div>
-        <div style="font-size:11.5px; color:var(--txt-dim); margin-bottom:14px;">Main Branch — Model Town</div>
-        <div class="staff-row"><div class="icon3d violet" style="width:34px;height:34px;border-radius:11px;font-size:13px;">KI</div><div>Kamran Iqbal</div><span class="role-badge">Cashier</span></div>
-        <div class="staff-row"><div class="icon3d cyan" style="width:34px;height:34px;border-radius:11px;font-size:13px;">SY</div><div>Sana Yousuf</div><span class="role-badge">Manager</span></div>
-        <div class="staff-row"><div class="icon3d gold" style="width:34px;height:34px;border-radius:11px;font-size:13px;">YU</div><div>You (Owner)</div><span class="role-badge" style="background:linear-gradient(135deg,var(--gold),#F59E0B); color:#291B00;">Full access</span></div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px;" id="biz-name-display">Your Business</div>
+        <div style="font-size:11.5px; color:var(--txt-dim); margin-bottom:14px;" id="biz-branch-display">Main Branch</div>
+        <div id="staff-list"></div>
       </div>
-      <button class="btn btn-outline" onclick="alert('Invite link generated — share with your staff')">+ Add staff member</button>
+      <button class="btn btn-outline" onclick="addStaffMember()">+ Add staff member</button>
       <div class="glass report-card" style="margin-top:14px;">
         <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14px; margin-bottom:5px;">+ Add another branch</div>
-        <div style="font-size:12px; color:var(--txt-dim);">Track separate khatas per shop, with one combined report at the top.</div>
+        <div style="font-size:12px; color:var(--txt-dim);">Multi-branch support isn't built yet — this app currently tracks one khata per device.</div>
       </div>
     </main>
     <nav class="bottom glass">
@@ -597,7 +597,7 @@
 
   <!-- 9. NOTIFICATIONS -->
   <div class="view" id="view-notifications">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title">Notifications</div></header>
     <main>
       <div class="glass report-card" style="padding:6px 14px;">
@@ -611,7 +611,7 @@
 
   <!-- 10. SETTINGS -->
   <div class="view" id="view-settings">
-    <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
+    <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top plain"><div class="screen-title">Settings</div></header>
     <main>
       <div class="glass report-card">
@@ -624,10 +624,10 @@
       </div>
       <div class="glass report-card">
         <div class="card-eyebrow">Account</div>
-        <div class="setting-row">Business profile<span>›</span></div>
+        <div class="setting-row" onclick="switchView('business')" style="cursor:pointer;">Business profile<span>›</span></div>
         <div class="setting-row" onclick="backupToDrive()" style="cursor:pointer;">Backup to Google Drive<span>›</span></div>
         <div class="setting-row" onclick="restoreFromDrive()" style="cursor:pointer;">Restore from Google Drive<span>›</span></div>
-        <div class="setting-row">Change PIN<span>›</span></div>
+        <div class="setting-row" onclick="changePin()" style="cursor:pointer;">Change PIN<span>›</span></div>
       </div>
       <button class="btn btn-outline" onclick="switchView('login')">Log out</button>
     </main>
@@ -742,6 +742,194 @@ async function restoreFromDrive(){
   if(!res.ok){ console.error('Drive restore failed', await res.text()); return; }
   const data = await res.json();
   applyRestoredData(data);
+}
+
+// ----- Real status bar (clock + battery, no more fake "9:41 100%") -----
+function updateStatusBar(){
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true }).replace(' ','');
+  document.querySelectorAll('.status-time').forEach(el=>el.textContent = timeStr);
+}
+function updateBatteryDisplay(level){
+  const pct = Math.round(level*100) + '%';
+  document.querySelectorAll('.status-batt').forEach(el=>el.textContent = pct);
+}
+function initStatusBar(){
+  updateStatusBar();
+  setInterval(updateStatusBar, 30000);
+  if(navigator.getBattery){
+    navigator.getBattery().then(battery=>{
+      updateBatteryDisplay(battery.level);
+      battery.addEventListener('levelchange', ()=>updateBatteryDisplay(battery.level));
+    }).catch(()=>{});
+  }
+}
+
+function changePin(){
+  const auth = loadAuth();
+  if(!auth){ alert('No account found on this device.'); return; }
+  const current = prompt('Enter your current PIN:');
+  if(current === null) return;
+  if(current !== auth.pin){ alert('Current PIN is incorrect.'); return; }
+  const next = prompt('Enter your new PIN (4-6 digits):');
+  if(!next || next.trim().length < 4){ alert('PIN should be at least 4 digits.'); return; }
+  auth.pin = next.trim();
+  saveAuth(auth);
+  alert('PIN updated successfully.');
+}
+
+// ----- Staff (local list — heads up: this does NOT create separate logins/permissions yet, just a shared contact list) -----
+const STAFF_KEY = 'khataProStaff';
+function loadStaff(){ try{ return JSON.parse(localStorage.getItem(STAFF_KEY) || '[]'); }catch(e){ return []; } }
+function saveStaff(list){ localStorage.setItem(STAFF_KEY, JSON.stringify(list)); }
+
+function renderBusinessScreen(){
+  const auth = loadAuth();
+  const nameEl = document.getElementById('biz-name-display');
+  const branchEl = document.getElementById('biz-branch-display');
+  if(nameEl) nameEl.textContent = (auth && auth.bizname) || 'Your Business';
+  if(branchEl) branchEl.textContent = 'Main Branch' + (auth && auth.mobile ? ' — ' + auth.mobile : '');
+
+  const staff = loadStaff();
+  const listEl = document.getElementById('staff-list');
+  if(!listEl) return;
+  const rows = staff.map(s=>`<div class="staff-row"><div class="icon3d violet" style="width:34px;height:34px;border-radius:11px;font-size:13px;">${initials(s.name)}</div><div style="flex:1;">${s.name}</div><span class="role-badge">${s.role}</span><button onclick="removeStaffMember('${s.id}')" style="background:none;border:none;color:var(--txt-dim);cursor:pointer;">✕</button></div>`).join('');
+  const ownerRow = `<div class="staff-row"><div class="icon3d gold" style="width:34px;height:34px;border-radius:11px;font-size:13px;">YU</div><div style="flex:1;">You (Owner)</div><span class="role-badge" style="background:linear-gradient(135deg,var(--gold),#F59E0B); color:#291B00;">Full access</span></div>`;
+  listEl.innerHTML = rows + ownerRow;
+}
+
+function addStaffMember(){
+  const name = prompt('Staff member name:');
+  if(!name || !name.trim()) return;
+  const role = prompt('Role (e.g. Cashier, Manager):', 'Cashier') || 'Staff';
+  const staff = loadStaff();
+  staff.push({ id: uid(), name: name.trim(), role: role.trim() });
+  saveStaff(staff);
+  renderBusinessScreen();
+}
+
+function removeStaffMember(id){
+  if(!confirm('Remove this staff member from the list?')) return;
+  saveStaff(loadStaff().filter(s=>s.id!==id));
+  renderBusinessScreen();
+}
+
+// ----- Voice entry (uses device speech recognition — needs internet/Google app, unlike the rest of the app) -----
+function startVoiceEntry(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition){
+    alert('Voice input is not available on this device.');
+    return;
+  }
+  const btn = document.getElementById('voice-entry-btn');
+  const rec = new SpeechRecognition();
+  rec.lang = 'en-US';
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+
+  btn.textContent = '🎙 Listening…';
+  rec.start();
+
+  rec.onresult = (event)=>{
+    const transcript = event.results[0][0].transcript;
+    parseVoiceTranscript(transcript);
+    btn.textContent = '🎙 Speak this entry instead';
+  };
+  rec.onerror = ()=>{
+    btn.textContent = '🎙 Speak this entry instead';
+    alert('Could not hear that clearly — needs an internet connection to work. Please try again or enter manually.');
+  };
+  rec.onend = ()=>{ btn.textContent = '🎙 Speak this entry instead'; };
+}
+
+function parseVoiceTranscript(text){
+  // Best-effort parse of things like "Ahmed gave 2000 for goods" or "got 500 from Bilal cash"
+  const lower = text.toLowerCase();
+  const amountMatch = lower.match(/(\d[\d,]*)/);
+  const amount = amountMatch ? amountMatch[1].replace(/,/g,'') : '';
+  const isGave = /\bgave\b|\bgive\b|\bpaid\b/.test(lower);
+  const isGot = /\bgot\b|\bgot\b|\breceived\b/.test(lower);
+
+  let name = '';
+  const fromMatch = lower.match(/from\s+([a-z\s]+)/);
+  const firstWordMatch = text.match(/^([A-Za-z]+)/);
+  if(fromMatch) name = fromMatch[1].trim();
+  else if(firstWordMatch) name = firstWordMatch[1];
+
+  if(name) document.getElementById('entry-customer').value = name.charAt(0).toUpperCase()+name.slice(1);
+  if(amount) document.getElementById('amt-input').value = amount;
+  setMode(isGot && !isGave ? 'get' : 'give');
+  document.getElementById('entry-note').value = text;
+
+  alert('Heard: "' + text + '" — please review the fields below before saving.');
+}
+
+// ----- Real offline PDF export (hand-built minimal PDF, no external library/network needed) -----
+function escapePdfText(s){
+  return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
+}
+function buildSimplePdf(lines){
+  const fontSize = 11, lineHeight = 16, marginTop = 760, marginLeft = 40;
+  let contentStream = 'BT /F1 ' + fontSize + ' Tf ' + marginLeft + ' ' + marginTop + ' Td\n';
+  lines.forEach((line, i)=>{
+    if(i>0) contentStream += '0 -' + lineHeight + ' Td\n';
+    contentStream += '(' + escapePdfText(line) + ') Tj\n';
+  });
+  contentStream += 'ET';
+
+  const objects = [];
+  objects.push('<< /Type /Catalog /Pages 2 0 R >>');
+  objects.push('<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+  objects.push('<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 4 0 R >> >> /MediaBox [0 0 612 792] /Contents 5 0 R >>');
+  objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+  objects.push('<< /Length ' + contentStream.length + ' >>\nstream\n' + contentStream + '\nendstream');
+
+  let pdf = '%PDF-1.4\n';
+  const offsets = [0];
+  objects.forEach((obj, i)=>{
+    offsets.push(pdf.length);
+    pdf += (i+1) + ' 0 obj\n' + obj + '\nendobj\n';
+  });
+  const xrefStart = pdf.length;
+  pdf += 'xref\n0 ' + (objects.length+1) + '\n0000000000 65535 f \n';
+  for(let i=1;i<=objects.length;i++){
+    pdf += String(offsets[i]).padStart(10,'0') + ' 00000 n \n';
+  }
+  pdf += 'trailer\n<< /Size ' + (objects.length+1) + ' /Root 1 0 R >>\nstartxref\n' + xrefStart + '\n%%EOF';
+  return pdf;
+}
+
+function exportReportPdf(){
+  const auth = loadAuth();
+  const bizname = (auth && auth.bizname) || 'Khata Pro';
+  const lines = [];
+  lines.push(bizname + ' — Ledger Report');
+  lines.push('Generated: ' + new Date().toLocaleString());
+  lines.push('');
+  let give=0, get=0;
+  KP.customers.forEach(c=>{ const b=customerBalance(c); if(b>=0) get+=b; else give+=-b; });
+  lines.push("Total You'll Get: " + money(get));
+  lines.push("Total You'll Give: " + money(give));
+  lines.push('');
+  lines.push('Customer breakdown:');
+  KP.customers.forEach(c=>{
+    const b = customerBalance(c);
+    lines.push('  ' + c.name + ' - ' + (b>=0? "You'll get " : "You'll give ") + money(b));
+  });
+  if(!KP.customers.length) lines.push('  No customers yet.');
+
+  const pdfString = buildSimplePdf(lines);
+  const bytes = new Uint8Array(pdfString.length);
+  for(let i=0;i<pdfString.length;i++) bytes[i] = pdfString.charCodeAt(i) & 0xff;
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'khata-pro-report-' + new Date().toISOString().slice(0,10) + '.pdf';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 5000);
 }
 
 // ===== Real local data store (source of truth — Drive backup mirrors this) =====
@@ -883,22 +1071,64 @@ function renderLedger(customerId){
 function renderAll(){ renderDashboard(); renderCustomersList(); }
 
 // ----- Save actions (wired to real forms) -----
+function openAddCustomerFresh(){
+  editingCustomerId = null;
+  document.getElementById('ac-screen-title').textContent = 'Add Customer';
+  document.getElementById('ac-save-btn').textContent = 'Save Customer';
+  resetAddCustomerForm();
+  setOpenMode('give');
+  switchView('addcustomer');
+}
+
+let editingCustomerId = null;
+
+function editCurrentCustomer(){
+  const c = KP.customers.find(x=>x.id===currentLedgerCustomerId);
+  if(!c) return;
+  editingCustomerId = c.id;
+  document.getElementById('ac-screen-title').textContent = 'Edit Customer';
+  document.getElementById('ac-save-btn').textContent = 'Save Changes';
+  document.getElementById('ac-name').value = c.name;
+  document.getElementById('ac-phone').value = c.phone || '';
+  document.getElementById('ac-opening').value = c.opening || '';
+  document.getElementById('ac-notes').value = c.notes || '';
+  setOpenMode(c.openingType === 'owe_me' ? 'give' : 'get');
+  switchView('addcustomer');
+}
+
 function saveCustomer(){
   const name = (document.getElementById('ac-name').value || '').trim();
   if(!name){ alert('Please enter a customer name.'); return; }
   const phone = document.getElementById('ac-phone').value.trim();
   const opening = parseFloat(document.getElementById('ac-opening').value) || 0;
   const notes = document.getElementById('ac-notes').value.trim();
+
+  if(editingCustomerId){
+    const c = KP.customers.find(x=>x.id===editingCustomerId);
+    if(c){ c.name=name; c.phone=phone; c.opening=opening; c.openingType=pendingOpenMode; c.notes=notes; }
+    saveStore();
+    editingCustomerId = null;
+    document.getElementById('ac-screen-title').textContent = 'Add Customer';
+    document.getElementById('ac-save-btn').textContent = 'Save Customer';
+    renderAll();
+    resetAddCustomerForm();
+    openLedger(c.id);
+    return;
+  }
+
   const c = { id: uid(), name, phone, notes, opening, openingType: pendingOpenMode, createdAt: new Date().toISOString() };
   KP.customers.push(c);
   saveStore();
-  // reset form
+  resetAddCustomerForm();
+  renderAll();
+  switchView('customers');
+}
+
+function resetAddCustomerForm(){
   document.getElementById('ac-name').value='';
   document.getElementById('ac-phone').value='';
   document.getElementById('ac-opening').value='';
   document.getElementById('ac-notes').value='';
-  renderAll();
-  switchView('customers');
 }
 
 function setNote(text){ document.getElementById('entry-note').value = text; }
@@ -1020,6 +1250,17 @@ function callCustomer(){
   else{ alert('No phone number saved for this customer yet.'); }
 }
 
+function whatsappCustomer(){
+  const c = KP.customers.find(x=>x.id===currentLedgerCustomerId);
+  if(!c || !c.phone){ alert('No phone number saved for this customer yet.'); return; }
+  const bal = customerBalance(c);
+  const digits = c.phone.replace(/[^0-9]/g,'');
+  const msg = bal >= 0
+    ? `Hi ${c.name}, a friendly reminder — your pending balance is ${money(bal)}. Thank you!`
+    : `Hi ${c.name}, just confirming — we owe you ${money(-bal)} on our ledger.`;
+  window.location.href = `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`;
+}
+
 // ----- Reports (real data) -----
 function renderReports(){
   const barsEl = document.getElementById('report-bars');
@@ -1066,6 +1307,7 @@ function switchView(id, btn){
   if(id==='dashboard'){ renderDashboard(); setTimeout(animateEntries, 160); }
   if(id==='customers'){ renderCustomersList(); setTimeout(animateEntries, 160); }
   if(id==='reports'){ renderReports(); setTimeout(animateBars, 160); }
+  if(id==='business'){ renderBusinessScreen(); }
   if(id==='login'){
     authMode = 'signup'; toggleAuthMode(); // normalize to login mode
     document.getElementById('auth-mobile').value=''; document.getElementById('auth-pin').value='';
@@ -1132,6 +1374,7 @@ function toggleLang(){ urdu = !urdu; }
 // initial render on load
 renderAll();
 animateEntries();
+initStatusBar();
 </script>
 </body>
 </html>
