@@ -414,8 +414,8 @@
       </div>
 
       <div class="summary">
-        <div class="glass sum-card give"><div class="glow"></div><div class="label">You'll Give</div><div class="amt">₨ 42,300</div><div class="trend">↑ 6% vs last month</div></div>
-        <div class="glass sum-card get"><div class="glow"></div><div class="label">You'll Get</div><div class="amt">₨ 118,750</div><div class="trend">↑ 18% vs last month</div></div>
+        <div class="glass sum-card give"><div class="glow"></div><div class="label">You'll Give</div><div class="amt" id="dash-give-amt">₨ 0</div><div class="trend">&nbsp;</div></div>
+        <div class="glass sum-card get"><div class="glow"></div><div class="label">You'll Get</div><div class="amt" id="dash-get-amt">₨ 0</div><div class="trend">&nbsp;</div></div>
       </div>
 
       <div class="quick-actions">
@@ -427,9 +427,7 @@
 
       <div class="section-title">Recent Activity<span class="see-all" onclick="switchView('customers', document.querySelectorAll('nav.bottom button')[1])">See all customers ›</span></div>
 
-      <div class="glass cust get" style="animation-delay:.05s" onclick="openLedger('Ahmed Furniture House')"><div class="icon3d violet">AF</div><div class="cust-info"><div class="name">Ahmed Furniture House</div><div class="meta">Last entry: Today, 2:40pm</div></div><div class="cust-amt">₨ 24,500<small>You'll get</small></div></div>
-      <div class="glass cust give" style="animation-delay:.12s" onclick="openLedger('Bilal Traders')"><div class="icon3d pink">BT</div><div class="cust-info"><div class="name">Bilal Traders</div><div class="meta">Last entry: Yesterday</div></div><div class="cust-amt">₨ 9,000<small>You'll give</small></div></div>
-      <div class="glass cust give" style="animation-delay:.19s" onclick="openLedger('Rashid Motors')"><div class="icon3d gold">RM</div><div class="cust-info"><div class="name">Rashid Motors</div><div class="meta">Last entry: 5 days ago</div></div><div class="cust-amt">₨ 33,300<small>You'll give</small></div></div>
+      <div id="dash-recent"></div>
 
       <div class="section-title" style="margin-top:22px;">Why Khata Pro</div>
       <div class="glass report-card" style="font-size:12.5px; line-height:1.7; color:var(--txt-dim);">Voice entries in Urdu &amp; English, offline-first sync, staff logins per branch, and automatic reminders.</div>
@@ -452,17 +450,14 @@
       <button class="lang-toggle" onclick="switchView('addcustomer')">+ Add</button>
     </header>
     <main>
-      <div class="glass search" onclick="void(0)">🔍 <input class="search-input" type="text" placeholder="Search customers..."></div>
+      <div class="glass search" onclick="void(0)">🔍 <input id="cust-search" class="search-input" type="text" placeholder="Search customers..." oninput="renderCustomersList()"></div>
       <div class="filter-row">
-        <button class="filter-chip active" onclick="filterCust('all', this)">All <span class="fc-count">4</span></button>
+        <button class="filter-chip active" onclick="filterCust('all', this)">All <span class="fc-count" id="cust-count-all">0</span></button>
         <button class="filter-chip" onclick="filterCust('get', this)">You'll Get</button>
         <button class="filter-chip" onclick="filterCust('give', this)">You'll Give</button>
       </div>
 
-      <div class="glass cust get" data-type="get" style="animation-delay:.05s" onclick="openLedger('Ahmed Furniture House')"><div class="icon3d violet">AF</div><div class="cust-info"><div class="name">Ahmed Furniture House</div><div class="meta">Last entry: Today, 2:40pm</div></div><div class="cust-amt">₨ 24,500<small>You'll get</small></div></div>
-      <div class="glass cust give" data-type="give" style="animation-delay:.12s" onclick="openLedger('Bilal Traders')"><div class="icon3d pink">BT</div><div class="cust-info"><div class="name">Bilal Traders</div><div class="meta">Last entry: Yesterday</div></div><div class="cust-amt">₨ 9,000<small>You'll give</small></div></div>
-      <div class="glass cust get" data-type="get" style="animation-delay:.19s" onclick="openLedger('Zainab General Store')"><div class="icon3d cyan">ZG</div><div class="cust-info"><div class="name">Zainab General Store</div><div class="meta">Last entry: 3 days ago</div></div><div class="cust-amt">₨ 61,200<small>You'll get</small></div></div>
-      <div class="glass cust give" data-type="give" style="animation-delay:.26s" onclick="openLedger('Rashid Motors')"><div class="icon3d gold">RM</div><div class="cust-info"><div class="name">Rashid Motors</div><div class="meta">Last entry: 5 days ago</div></div><div class="cust-amt">₨ 33,300<small>You'll give</small></div></div>
+      <div id="customers-list"></div>
     </main>
     <button class="fab" onclick="switchView('addcustomer')"><span>+</span></button>
     <nav class="bottom glass">
@@ -483,15 +478,15 @@
         <div class="icon3d violet" style="width:76px; height:76px; border-radius:24px; font-size:28px; margin:0 auto;">🧑</div>
         <div class="ap-label">Add photo (optional)</div>
       </div>
-      <div class="field"><label>Full name</label><input type="text" placeholder="e.g. Ahmed Furniture House"></div>
-      <div class="field"><label>Mobile number</label><input type="text" placeholder="+92 300 1234567"></div>
-      <div class="field"><label>Opening balance</label><input type="text" placeholder="₨ 0"></div>
+      <div class="field"><label>Full name</label><input id="ac-name" type="text" placeholder="e.g. Ahmed Furniture House"></div>
+      <div class="field"><label>Mobile number</label><input id="ac-phone" type="text" placeholder="+92 300 1234567"></div>
+      <div class="field"><label>Opening balance</label><input id="ac-opening" type="number" inputmode="decimal" placeholder="0"></div>
       <div class="glass toggle-row">
         <button class="on" id="oc-give" onclick="setOpenMode('give')">They Owe Me</button>
         <button id="oc-get" onclick="setOpenMode('get')">I Owe Them</button>
       </div>
-      <div class="field"><label>Notes (optional)</label><input type="text" placeholder="Shop area, category, etc."></div>
-      <button class="btn btn-primary" onclick="switchView('customers')">Save Customer</button>
+      <div class="field"><label>Notes (optional)</label><input id="ac-notes" type="text" placeholder="Shop area, category, etc."></div>
+      <button class="btn btn-primary" onclick="saveCustomer()">Save Customer</button>
     </main>
   </div>
 
@@ -501,19 +496,20 @@
     <div class="status"><span>9:41</span><span>●●● 5G 100%</span></div>
     <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title">New Entry</div></header>
     <main>
-      <div class="field"><label>Customer</label><input type="text" placeholder="Search or type new customer name" value="Ahmed Furniture House"></div>
+      <div class="field"><label>Customer</label><input id="entry-customer" type="text" list="customer-list" placeholder="Search or type new customer name"></div>
+      <datalist id="customer-list"></datalist>
       <div class="glass toggle-row">
         <button class="on" id="mode-give" onclick="setMode('give')">You Gave</button>
         <button id="mode-get" onclick="setMode('get')">You Got</button>
       </div>
-      <div class="keypad-amt">₨ <span id="amt-display">0</span></div>
+      <div class="keypad-amt">₨ <input id="amt-input" type="number" inputmode="decimal" placeholder="0" style="background:transparent; border:none; outline:none; width:55%; font:inherit; color:var(--txt); -webkit-text-fill-color:var(--txt);"></div>
       <div class="quick-notes">
-        <span class="chip glass">Cash</span><span class="chip glass">Bank transfer</span><span class="chip glass">Goods</span><span class="chip glass">Advance</span>
+        <span class="chip glass" onclick="setNote('Cash')">Cash</span><span class="chip glass" onclick="setNote('Bank transfer')">Bank transfer</span><span class="chip glass" onclick="setNote('Goods')">Goods</span><span class="chip glass" onclick="setNote('Advance')">Advance</span>
       </div>
-      <div class="field"><label>Note (optional)</label><input type="text" placeholder="e.g. Sofa set delivery"></div>
-      <div class="field"><label>Date</label><input type="text" value="10 Jul 2026, Today"></div>
+      <div class="field"><label>Note (optional)</label><input id="entry-note" type="text" placeholder="e.g. Sofa set delivery"></div>
+      <div class="field"><label>Date</label><input id="entry-date" type="text" readonly></div>
       <button class="mic" style="width:100%; border-radius:16px; height:52px; margin-bottom:14px;" onclick="alert('Listening... say the amount and reason')">🎙 Speak this entry instead</button>
-      <button class="btn btn-primary" onclick="switchView('dashboard')">Save Entry</button>
+      <button class="btn btn-primary" onclick="saveEntry()">Save Entry</button>
     </main>
   </div>
 
@@ -534,17 +530,14 @@
           <circle class="bgc" cx="55" cy="55" r="50"></circle>
           <circle class="fgc" cx="55" cy="55" r="50"></circle>
         </svg>
-        <div class="ringtext"><b>68%</b><span>Settled</span></div>
+        <div class="ringtext"><b id="ledger-ring-pct">0%</b><span>Settled</span></div>
       </div>
       <div class="summary">
-        <div class="glass sum-card give"><div class="glow"></div><div class="label">Total Gave</div><div class="amt">₨ 12,000</div></div>
-        <div class="glass sum-card get"><div class="glow"></div><div class="label">Total Got</div><div class="amt">₨ 33,300</div></div>
+        <div class="glass sum-card give"><div class="glow"></div><div class="label">Total Gave</div><div class="amt" id="ledger-gave-amt">₨ 0</div></div>
+        <div class="glass sum-card get"><div class="glow"></div><div class="label">Total Got</div><div class="amt" id="ledger-got-amt">₨ 0</div></div>
       </div>
       <div class="section-title">Entries<button class="add-small" onclick="switchView('newentry')">+ Add</button></div>
-      <div class="glass report-card" style="padding:0 16px;">
-        <div class="entry-row"><div class="icon3d green" style="width:36px;height:36px;border-radius:11px;font-size:15px;">💵</div><div><div class="t">Cash payment received</div><div class="d">10 Jul, 11:02am • Ahmed</div></div><div class="a" style="color:var(--green);">+₨5,000</div></div>
-        <div class="entry-row"><div class="icon3d red" style="width:36px;height:36px;border-radius:11px;font-size:15px;">🛋️</div><div><div class="t">Goods supplied — sofa set</div><div class="d">08 Jul, 4:15pm • Ahmed</div></div><div class="a" style="color:var(--red);">-₨18,000</div></div>
-        <div class="entry-row"><div class="icon3d green" style="width:36px;height:36px;border-radius:11px;font-size:15px;">💰</div><div><div class="t">Advance received</div><div class="d">02 Jul, 9:40am • Staff: Kamran</div></div><div class="a" style="color:var(--green);">+₨10,000</div></div>
+      <div class="glass report-card" style="padding:0 16px;" id="ledger-entries"></div>
       </div>
       <button class="btn btn-outline" onclick="alert('Sending WhatsApp reminder with payment link...')" style="margin-top:16px;">📤 Send reminder on WhatsApp</button>
     </main>
@@ -692,20 +685,16 @@ async function signOutGoogle(){
   driveAccessToken = null;
 }
 
-// Collects whatever local app state you want backed up. Currently a placeholder —
-// wire this to your real customers/entries state once local storage is added.
+// Backs up the real local ledger data (customers + entries) to Drive.
 function collectLocalDataForBackup(){
-  try{
-    return JSON.parse(localStorage.getItem('khataProData') || '{}');
-  }catch(e){ return {}; }
+  return KP;
 }
 
 function applyRestoredData(data){
-  try{
-    localStorage.setItem('khataProData', JSON.stringify(data || {}));
-    // TODO: re-render dashboard/customers/ledger screens from this data
-    // once real local state (instead of hardcoded sample data) is wired in.
-  }catch(e){ console.error('Failed applying restored data', e); }
+  if(!data || (!data.customers && !data.entries)) return;
+  KP = { customers: data.customers || [], entries: data.entries || [] };
+  saveStore();
+  renderAll();
 }
 
 async function findDriveFileId(){
@@ -757,6 +746,190 @@ async function restoreFromDrive(){
   applyRestoredData(data);
 }
 
+// ===== Real local data store (source of truth — Drive backup mirrors this) =====
+const STORE_KEY = 'khataProStore';
+
+function loadStore(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){ console.error('Failed to load store', e); }
+  return { customers: [], entries: [] };
+}
+function saveStore(){ localStorage.setItem(STORE_KEY, JSON.stringify(KP)); }
+
+let KP = loadStore();
+let currentLedgerCustomerId = null;
+let pendingEntryMode = 'give';
+let pendingOpenMode = 'give';
+
+function uid(){ return 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function initials(name){ return (name||'?').trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+function money(n){ return '₨ ' + Math.round(Math.abs(n)).toLocaleString('en-IN'); }
+function fmtDate(iso){
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' }) + ', ' +
+         d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+}
+
+// Balance convention: positive = customer owes you (You'll Get). Negative = you owe them (You'll Give).
+function customerBalance(c){
+  let bal = c.openingType === 'owe_me' ? (c.opening||0) : -(c.opening||0);
+  KP.entries.filter(e=>e.customerId===c.id).forEach(e=>{
+    bal += e.type === 'give' ? e.amount : -e.amount;
+  });
+  return bal;
+}
+function findCustomerByName(name){
+  const n = (name||'').trim().toLowerCase();
+  return KP.customers.find(c=>c.name.trim().toLowerCase()===n);
+}
+function lastEntryLabel(customerId){
+  const list = KP.entries.filter(e=>e.customerId===customerId).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(!list.length) return 'No entries yet';
+  return 'Last entry: ' + fmtDate(list[0].date);
+}
+
+// ----- Rendering -----
+function custCardHTML(c, delay){
+  const bal = customerBalance(c);
+  const type = bal >= 0 ? 'get' : 'give';
+  const label = bal >= 0 ? "You'll get" : "You'll give";
+  return `<div class="glass cust ${type}" data-type="${type}" style="animation-delay:${delay}s" onclick="openLedger('${c.id}')">
+    <div class="icon3d violet">${initials(c.name)}</div>
+    <div class="cust-info"><div class="name">${c.name}</div><div class="meta">${lastEntryLabel(c.id)}</div></div>
+    <div class="cust-amt">${money(bal)}<small>${label}</small></div>
+  </div>`;
+}
+
+function renderDashboard(){
+  let give = 0, get = 0;
+  KP.customers.forEach(c=>{ const b = customerBalance(c); if(b>=0) get += b; else give += -b; });
+  const giveEl = document.getElementById('dash-give-amt');
+  const getEl = document.getElementById('dash-get-amt');
+  if(giveEl) giveEl.textContent = money(give);
+  if(getEl) getEl.textContent = money(get);
+
+  const recent = document.getElementById('dash-recent');
+  if(recent){
+    const sorted = [...KP.customers].sort((a,b)=>{
+      const la = KP.entries.filter(e=>e.customerId===a.id).sort((x,y)=>new Date(y.date)-new Date(x.date))[0];
+      const lb = KP.entries.filter(e=>e.customerId===b.id).sort((x,y)=>new Date(y.date)-new Date(x.date))[0];
+      return new Date(lb?lb.date:0) - new Date(la?la.date:0);
+    }).slice(0,3);
+    recent.innerHTML = sorted.length
+      ? sorted.map((c,i)=>custCardHTML(c, i*0.07)).join('')
+      : `<div class="glass report-card" style="padding:16px; font-size:13px; color:var(--txt-dim);">No customers yet. Tap "Add Customer" to get started.</div>`;
+  }
+}
+
+function renderCustomersList(){
+  const list = document.getElementById('customers-list');
+  if(!list) return;
+  const q = (document.getElementById('cust-search')?.value || '').trim().toLowerCase();
+  const filtered = KP.customers.filter(c=>c.name.toLowerCase().includes(q));
+  list.innerHTML = filtered.length
+    ? filtered.map((c,i)=>custCardHTML(c, i*0.07)).join('')
+    : `<div class="glass report-card" style="padding:16px; font-size:13px; color:var(--txt-dim);">No customers found.</div>`;
+  const countEl = document.getElementById('cust-count-all');
+  if(countEl) countEl.textContent = KP.customers.length;
+  // re-apply the currently active filter chip
+  const activeChip = document.querySelector('#view-customers .filter-chip.active');
+  if(activeChip){
+    const label = activeChip.textContent.trim();
+    const type = label.startsWith('You') ? (label.includes('Get') ? 'get' : 'give') : 'all';
+    document.querySelectorAll('#view-customers .cust').forEach(el=>{
+      el.style.display = (type==='all' || el.dataset.type===type) ? 'flex' : 'none';
+    });
+  }
+}
+
+function renderLedger(customerId){
+  const c = KP.customers.find(x=>x.id===customerId);
+  if(!c) return;
+  document.getElementById('ledger-name').textContent = c.name;
+  const av = document.getElementById('ledger-avatar');
+  if(av) av.textContent = initials(c.name);
+
+  const entries = KP.entries.filter(e=>e.customerId===customerId).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const totalGave = entries.filter(e=>e.type==='give').reduce((s,e)=>s+e.amount,0);
+  const totalGot = entries.filter(e=>e.type==='get').reduce((s,e)=>s+e.amount,0);
+  document.getElementById('ledger-gave-amt').textContent = money(totalGave);
+  document.getElementById('ledger-got-amt').textContent = money(totalGot);
+
+  const settled = (totalGave+totalGot) > 0 ? Math.round((totalGot/(totalGave+totalGot))*100) : 0;
+  const pctEl = document.getElementById('ledger-ring-pct');
+  if(pctEl) pctEl.textContent = settled + '%';
+  const fgc = document.querySelector('#view-ledger .fgc');
+  if(fgc){
+    const r = 50, circumference = 2*Math.PI*r;
+    fgc.style.strokeDasharray = circumference;
+    fgc.style.strokeDashoffset = circumference * (1 - settled/100);
+  }
+
+  const entriesEl = document.getElementById('ledger-entries');
+  entriesEl.innerHTML = entries.length ? entries.map(e=>{
+    const isGive = e.type==='give';
+    return `<div class="entry-row">
+      <div class="icon3d ${isGive?'red':'green'}" style="width:36px;height:36px;border-radius:11px;font-size:15px;">${isGive?'📤':'💰'}</div>
+      <div><div class="t">${e.note || (isGive?'You gave':'You got')}</div><div class="d">${fmtDate(e.date)}</div></div>
+      <div class="a" style="color:${isGive?'var(--red)':'var(--green)'};">${isGive?'-':'+'}${money(e.amount)}</div>
+    </div>`;
+  }).join('') : `<div style="padding:16px; font-size:13px; color:var(--txt-dim);">No entries yet for this customer.</div>`;
+}
+
+function renderAll(){ renderDashboard(); renderCustomersList(); }
+
+// ----- Save actions (wired to real forms) -----
+function saveCustomer(){
+  const name = (document.getElementById('ac-name').value || '').trim();
+  if(!name){ alert('Please enter a customer name.'); return; }
+  const phone = document.getElementById('ac-phone').value.trim();
+  const opening = parseFloat(document.getElementById('ac-opening').value) || 0;
+  const notes = document.getElementById('ac-notes').value.trim();
+  const c = { id: uid(), name, phone, notes, opening, openingType: pendingOpenMode, createdAt: new Date().toISOString() };
+  KP.customers.push(c);
+  saveStore();
+  // reset form
+  document.getElementById('ac-name').value='';
+  document.getElementById('ac-phone').value='';
+  document.getElementById('ac-opening').value='';
+  document.getElementById('ac-notes').value='';
+  renderAll();
+  switchView('customers');
+}
+
+function setNote(text){ document.getElementById('entry-note').value = text; }
+
+function saveEntry(){
+  const nameInput = document.getElementById('entry-customer');
+  const name = (nameInput.value || '').trim();
+  if(!name){ alert('Please enter a customer name.'); return; }
+  const amount = parseFloat(document.getElementById('amt-input').value);
+  if(!amount || amount <= 0){ alert('Please enter a valid amount.'); return; }
+  const note = document.getElementById('entry-note').value.trim();
+
+  let c = findCustomerByName(name);
+  if(!c){
+    c = { id: uid(), name, phone:'', notes:'', opening:0, openingType:'owe_me', createdAt: new Date().toISOString() };
+    KP.customers.push(c);
+  }
+  KP.entries.push({ id: uid(), customerId: c.id, type: pendingEntryMode, amount, note, date: new Date().toISOString() });
+  saveStore();
+
+  // reset form
+  nameInput.value=''; document.getElementById('amt-input').value=''; document.getElementById('entry-note').value='';
+  renderAll();
+  currentLedgerCustomerId = c.id;
+  openLedger(c.id);
+}
+
+function refreshCustomerDatalist(){
+  const dl = document.getElementById('customer-list');
+  if(!dl) return;
+  dl.innerHTML = KP.customers.map(c=>`<option value="${c.name}"></option>`).join('');
+}
+
 function switchView(id, btn){
   const next = document.getElementById('view-'+id);
   const current = document.querySelector('.view.active');
@@ -777,13 +950,16 @@ function switchView(id, btn){
       next.classList.add('active');
     });
   });
-  if(id==='dashboard' || id==='customers'){ setTimeout(animateEntries, 160); }
+  if(id==='dashboard'){ renderDashboard(); setTimeout(animateEntries, 160); }
+  if(id==='customers'){ renderCustomersList(); setTimeout(animateEntries, 160); }
+  if(id==='newentry'){
+    refreshCustomerDatalist();
+    document.getElementById('entry-date').value = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) + ', Today';
+  }
 }
-function openLedger(name){
-  document.getElementById('ledger-name').textContent = name;
-  const initials = name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-  const av = document.getElementById('ledger-avatar');
-  if(av) av.textContent = initials;
+function openLedger(customerId){
+  currentLedgerCustomerId = customerId;
+  renderLedger(customerId);
   const next = document.getElementById('view-ledger');
   const current = document.querySelector('.view.active');
   if(current === next) return;
@@ -800,12 +976,14 @@ function openLedger(name){
   });
 }
 function setMode(mode){
+  pendingEntryMode = mode;
   document.getElementById('mode-give').classList.remove('on');
   document.getElementById('mode-get').classList.remove('on','get-mode');
   if(mode==='give'){ document.getElementById('mode-give').classList.add('on'); }
   else { document.getElementById('mode-get').classList.add('on','get-mode'); }
 }
 function setOpenMode(mode){
+  pendingOpenMode = mode==='give' ? 'owe_me' : 'i_owe';
   document.getElementById('oc-give').classList.remove('on');
   document.getElementById('oc-get').classList.remove('on','get-mode');
   if(mode==='give'){ document.getElementById('oc-give').classList.add('on'); }
@@ -832,7 +1010,9 @@ function animateBars(){
 function animateRing(){}
 let urdu = false;
 function toggleLang(){ urdu = !urdu; }
-// initial animations
+
+// initial render on load
+renderAll();
 animateEntries();
 </script>
 </body>
