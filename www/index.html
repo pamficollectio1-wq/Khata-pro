@@ -378,10 +378,24 @@
   <div class="view" id="view-login">
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <main style="padding-top:30px;">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:6px;">
+        <select id="lang-select-login" onchange="setLanguage(this.value)" style="background:var(--glass); border:1px solid var(--glass-brd); border-radius:8px; padding:6px 8px; color:var(--txt); font-size:12px;">
+          <option value="en">🌐 English</option>
+          <option value="ur">اردو (Urdu)</option>
+          <option value="hi">हिन्दी (Hindi)</option>
+          <option value="ar">العربية (Arabic)</option>
+          <option value="es">Español (Spanish)</option>
+          <option value="fr">Français (French)</option>
+          <option value="zh">中文 (Chinese)</option>
+          <option value="pt">Português (Portuguese)</option>
+          <option value="bn">বাংলা (Bengali)</option>
+          <option value="ru">Русский (Russian)</option>
+        </select>
+      </div>
       <div class="logo-mark" style="margin:0 auto 20px auto; width:76px; height:76px; font-size:32px; border-radius:22px;"><span class="letter">K</span></div>
       <div style="text-align:center; margin-bottom:26px;">
-        <div class="screen-title" id="auth-title">Welcome back</div>
-        <p style="font-size:12.5px; color:var(--txt-dim); margin-top:5px;" id="auth-subtitle">Login to your business khata</p>
+        <div class="screen-title" id="auth-title" data-i18n="auth_title_login">Welcome back</div>
+        <p style="font-size:12.5px; color:var(--txt-dim); margin-top:5px;" id="auth-subtitle" data-i18n="auth_subtitle_login">Login to your business khata</p>
       </div>
       <div class="form-wrap">
         <div class="field" id="auth-bizname-field" style="display:none;"><label>Business name</label><input id="auth-bizname" type="text" placeholder="e.g. Al-Karam Trading Co."></div>
@@ -957,70 +971,80 @@ const I18N = {
         btn_save_customer:'Save Customer', btn_save_entry:'Save Entry',
         settings_language:'Language', settings_currency:'Currency', settings_voice:'Voice entry',
         settings_whatsapp:'Auto WhatsApp reminders', settings_offline:'Offline mode', settings_bizprofile:'Business profile',
-        settings_backup:'Backup to Google Drive', settings_restore:'Restore from Google Drive', settings_changepin:'Change PIN' },
+        settings_backup:'Backup to Google Drive', settings_restore:'Restore from Google Drive', settings_changepin:'Change PIN',
+        auth_title_login:'Welcome back', auth_subtitle_login:'Login to your business khata', auth_title_signup:'Create your khata', auth_subtitle_signup:'Set up your business account', auth_btn_login:'Login', auth_btn_create:'Create account', auth_toggle_to_signup:'Create new business account', auth_toggle_to_login:'Already have an account? Login' },
   ur: { nav_home:'ہوم', nav_customers:'کسٹمرز', nav_reports:'رپورٹس', nav_business:'کاروبار', nav_settings:'ترتیبات',
         title_customers:'کسٹمرز', title_new_entry:'نئی انٹری', title_reports:'رپورٹس', title_business:'کاروبار اور عملہ',
         title_notifications:'اطلاعات', title_settings:'ترتیبات',
         btn_save_customer:'کسٹمر محفوظ کریں', btn_save_entry:'انٹری محفوظ کریں',
         settings_language:'زبان', settings_currency:'کرنسی', settings_voice:'وائس انٹری',
         settings_whatsapp:'خودکار واٹس ایپ یاد دہانی', settings_offline:'آف لائن موڈ', settings_bizprofile:'کاروباری پروفائل',
-        settings_backup:'گوگل ڈرائیو بیک اپ', settings_restore:'گوگل ڈرائیو سے بحال کریں', settings_changepin:'پن تبدیل کریں' },
+        settings_backup:'گوگل ڈرائیو بیک اپ', settings_restore:'گوگل ڈرائیو سے بحال کریں', settings_changepin:'پن تبدیل کریں',
+        auth_title_login:'خوش آمدید', auth_subtitle_login:'اپنے کاروباری کھاتے میں لاگ ان کریں', auth_title_signup:'اپنا کھاتہ بنائیں', auth_subtitle_signup:'اپنا کاروباری اکاؤنٹ سیٹ اپ کریں', auth_btn_login:'لاگ ان', auth_btn_create:'اکاؤنٹ بنائیں', auth_toggle_to_signup:'نیا کاروباری اکاؤنٹ بنائیں', auth_toggle_to_login:'پہلے سے اکاؤنٹ ہے؟ لاگ ان کریں' },
   hi: { nav_home:'होम', nav_customers:'ग्राहक', nav_reports:'रिपोर्ट', nav_business:'व्यवसाय', nav_settings:'सेटिंग्स',
         title_customers:'ग्राहक', title_new_entry:'नई एंट्री', title_reports:'रिपोर्ट', title_business:'व्यवसाय और स्टाफ',
         title_notifications:'सूचनाएं', title_settings:'सेटिंग्स',
         btn_save_customer:'ग्राहक सहेजें', btn_save_entry:'एंट्री सहेजें',
         settings_language:'भाषा', settings_currency:'मुद्रा', settings_voice:'वॉइस एंट्री',
         settings_whatsapp:'स्वचालित व्हाट्सएप रिमाइंडर', settings_offline:'ऑफ़लाइन मोड', settings_bizprofile:'व्यवसाय प्रोफ़ाइल',
-        settings_backup:'गूगल ड्राइव बैकअप', settings_restore:'गूगल ड्राइव से पुनर्स्थापित करें', settings_changepin:'पिन बदलें' },
+        settings_backup:'गूगल ड्राइव बैकअप', settings_restore:'गूगल ड्राइव से पुनर्स्थापित करें', settings_changepin:'पिन बदलें',
+        auth_title_login:'वापसी पर स्वागत है', auth_subtitle_login:'अपने व्यापार खाते में लॉगिन करें', auth_title_signup:'अपना खाता बनाएं', auth_subtitle_signup:'अपना व्यवसाय खाता सेट करें', auth_btn_login:'लॉगिन', auth_btn_create:'खाता बनाएं', auth_toggle_to_signup:'नया व्यवसाय खाता बनाएं', auth_toggle_to_login:'पहले से खाता है? लॉगिन करें' },
   ar: { nav_home:'الرئيسية', nav_customers:'العملاء', nav_reports:'التقارير', nav_business:'الأعمال', nav_settings:'الإعدادات',
         title_customers:'العملاء', title_new_entry:'إدخال جديد', title_reports:'التقارير', title_business:'الأعمال والموظفون',
         title_notifications:'الإشعارات', title_settings:'الإعدادات',
         btn_save_customer:'حفظ العميل', btn_save_entry:'حفظ الإدخال',
         settings_language:'اللغة', settings_currency:'العملة', settings_voice:'الإدخال الصوتي',
         settings_whatsapp:'تذكيرات واتساب التلقائية', settings_offline:'وضع عدم الاتصال', settings_bizprofile:'ملف الأعمال',
-        settings_backup:'نسخ احتياطي إلى جوجل درايف', settings_restore:'استعادة من جوجل درايف', settings_changepin:'تغيير الرمز' },
+        settings_backup:'نسخ احتياطي إلى جوجل درايف', settings_restore:'استعادة من جوجل درايف', settings_changepin:'تغيير الرمز',
+        auth_title_login:'مرحباً بعودتك', auth_subtitle_login:'سجّل الدخول إلى دفتر حساباتك', auth_title_signup:'أنشئ دفتر حساباتك', auth_subtitle_signup:'قم بإعداد حساب عملك', auth_btn_login:'تسجيل الدخول', auth_btn_create:'إنشاء حساب', auth_toggle_to_signup:'إنشاء حساب عمل جديد', auth_toggle_to_login:'لديك حساب بالفعل؟ سجّل الدخول' },
   es: { nav_home:'Inicio', nav_customers:'Clientes', nav_reports:'Informes', nav_business:'Negocio', nav_settings:'Ajustes',
         title_customers:'Clientes', title_new_entry:'Nueva entrada', title_reports:'Informes', title_business:'Negocio y personal',
         title_notifications:'Notificaciones', title_settings:'Ajustes',
         btn_save_customer:'Guardar cliente', btn_save_entry:'Guardar entrada',
         settings_language:'Idioma', settings_currency:'Moneda', settings_voice:'Entrada de voz',
         settings_whatsapp:'Recordatorios automaticos de WhatsApp', settings_offline:'Modo sin conexion', settings_bizprofile:'Perfil del negocio',
-        settings_backup:'Copia de seguridad en Google Drive', settings_restore:'Restaurar desde Google Drive', settings_changepin:'Cambiar PIN' },
+        settings_backup:'Copia de seguridad en Google Drive', settings_restore:'Restaurar desde Google Drive', settings_changepin:'Cambiar PIN',
+        auth_title_login:'Bienvenido de nuevo', auth_subtitle_login:'Inicia sesion en tu khata de negocio', auth_title_signup:'Crea tu khata', auth_subtitle_signup:'Configura tu cuenta de negocio', auth_btn_login:'Iniciar sesion', auth_btn_create:'Crear cuenta', auth_toggle_to_signup:'Crear nueva cuenta de negocio', auth_toggle_to_login:'Ya tienes cuenta? Inicia sesion' },
   fr: { nav_home:'Accueil', nav_customers:'Clients', nav_reports:'Rapports', nav_business:'Entreprise', nav_settings:'Parametres',
         title_customers:'Clients', title_new_entry:'Nouvelle entree', title_reports:'Rapports', title_business:'Entreprise et personnel',
         title_notifications:'Notifications', title_settings:'Parametres',
         btn_save_customer:'Enregistrer le client', btn_save_entry:"Enregistrer l'entree",
         settings_language:'Langue', settings_currency:'Devise', settings_voice:'Saisie vocale',
         settings_whatsapp:'Rappels WhatsApp automatiques', settings_offline:'Mode hors ligne', settings_bizprofile:"Profil de l'entreprise",
-        settings_backup:'Sauvegarder sur Google Drive', settings_restore:'Restaurer depuis Google Drive', settings_changepin:'Changer le PIN' },
+        settings_backup:'Sauvegarder sur Google Drive', settings_restore:'Restaurer depuis Google Drive', settings_changepin:'Changer le PIN',
+        auth_title_login:'Content de vous revoir', auth_subtitle_login:'Connectez-vous a votre khata professionnel', auth_title_signup:'Creez votre khata', auth_subtitle_signup:'Configurez votre compte professionnel', auth_btn_login:'Connexion', auth_btn_create:'Creer un compte', auth_toggle_to_signup:'Creer un nouveau compte professionnel', auth_toggle_to_login:'Deja un compte ? Connexion' },
   zh: { nav_home:'首页', nav_customers:'客户', nav_reports:'报表', nav_business:'商户', nav_settings:'设置',
         title_customers:'客户', title_new_entry:'新记录', title_reports:'报表', title_business:'商户与员工',
         title_notifications:'通知', title_settings:'设置',
         btn_save_customer:'保存客户', btn_save_entry:'保存记录',
         settings_language:'语言', settings_currency:'货币', settings_voice:'语音输入',
         settings_whatsapp:'自动WhatsApp提醒', settings_offline:'离线模式', settings_bizprofile:'商户资料',
-        settings_backup:'备份到谷歌云端硬盘', settings_restore:'从谷歌云端硬盘恢复', settings_changepin:'更改密码' },
+        settings_backup:'备份到谷歌云端硬盘', settings_restore:'从谷歌云端硬盘恢复', settings_changepin:'更改密码',
+        auth_title_login:'欢迎回来', auth_subtitle_login:'登录您的商户账本', auth_title_signup:'创建您的账本', auth_subtitle_signup:'设置您的商户账户', auth_btn_login:'登录', auth_btn_create:'创建账户', auth_toggle_to_signup:'创建新商户账户', auth_toggle_to_login:'已有账户？登录' },
   pt: { nav_home:'Inicio', nav_customers:'Clientes', nav_reports:'Relatorios', nav_business:'Negocio', nav_settings:'Config.',
         title_customers:'Clientes', title_new_entry:'Novo lancamento', title_reports:'Relatorios', title_business:'Negocio e equipe',
         title_notifications:'Notificacoes', title_settings:'Configuracoes',
         btn_save_customer:'Salvar cliente', btn_save_entry:'Salvar lancamento',
         settings_language:'Idioma', settings_currency:'Moeda', settings_voice:'Entrada por voz',
         settings_whatsapp:'Lembretes automaticos do WhatsApp', settings_offline:'Modo offline', settings_bizprofile:'Perfil do negocio',
-        settings_backup:'Backup no Google Drive', settings_restore:'Restaurar do Google Drive', settings_changepin:'Alterar PIN' },
+        settings_backup:'Backup no Google Drive', settings_restore:'Restaurar do Google Drive', settings_changepin:'Alterar PIN',
+        auth_title_login:'Bem-vindo de volta', auth_subtitle_login:'Entre no seu khata comercial', auth_title_signup:'Crie seu khata', auth_subtitle_signup:'Configure sua conta comercial', auth_btn_login:'Entrar', auth_btn_create:'Criar conta', auth_toggle_to_signup:'Criar nova conta comercial', auth_toggle_to_login:'Ja tem uma conta? Entrar' },
   bn: { nav_home:'হোম', nav_customers:'গ্রাহক', nav_reports:'রিপোর্ট', nav_business:'ব্যবসা', nav_settings:'সেটিংস',
         title_customers:'গ্রাহক', title_new_entry:'নতুন এন্ট্রি', title_reports:'রিপোর্ট', title_business:'ব্যবসা ও স্টাফ',
         title_notifications:'বিজ্ঞপ্তি', title_settings:'সেটিংস',
         btn_save_customer:'গ্রাহক সংরক্ষণ করুন', btn_save_entry:'এন্ট্রি সংরক্ষণ করুন',
         settings_language:'ভাষা', settings_currency:'মুদ্রা', settings_voice:'ভয়েস এন্ট্রি',
         settings_whatsapp:'স্বয়ংক্রিয় হোয়াটসঅ্যাপ রিমাইন্ডার', settings_offline:'অফলাইন মোড', settings_bizprofile:'ব্যবসার প্রোফাইল',
-        settings_backup:'গুগল ড্রাইভে ব্যাকআপ', settings_restore:'গুগল ড্রাইভ থেকে পুনরুদ্ধার করুন', settings_changepin:'পিন পরিবর্তন করুন' },
+        settings_backup:'গুগল ড্রাইভে ব্যাকআপ', settings_restore:'গুগল ড্রাইভ থেকে পুনরুদ্ধার করুন', settings_changepin:'পিন পরিবর্তন করুন',
+        auth_title_login:'ফিরে আসার জন্য স্বাগতম', auth_subtitle_login:'আপনার ব্যবসার খাতায় লগইন করুন', auth_title_signup:'আপনার খাতা তৈরি করুন', auth_subtitle_signup:'আপনার ব্যবসার অ্যাকাউন্ট সেট আপ করুন', auth_btn_login:'লগইন', auth_btn_create:'অ্যাকাউন্ট তৈরি করুন', auth_toggle_to_signup:'নতুন ব্যবসার অ্যাকাউন্ট তৈরি করুন', auth_toggle_to_login:'আগে থেকেই অ্যাকাউন্ট আছে? লগইন করুন' },
   ru: { nav_home:'Главная', nav_customers:'Клиенты', nav_reports:'Отчёты', nav_business:'Бизнес', nav_settings:'Настройки',
         title_customers:'Клиенты', title_new_entry:'Новая запись', title_reports:'Отчёты', title_business:'Бизнес и персонал',
         title_notifications:'Уведомления', title_settings:'Настройки',
         btn_save_customer:'Сохранить клиента', btn_save_entry:'Сохранить запись',
         settings_language:'Язык', settings_currency:'Валюта', settings_voice:'Голосовой ввод',
         settings_whatsapp:'Авто-напоминания WhatsApp', settings_offline:'Офлайн режим', settings_bizprofile:'Профиль бизнеса',
-        settings_backup:'Резервная копия в Google Drive', settings_restore:'Восстановить из Google Drive', settings_changepin:'Сменить PIN' }
+        settings_backup:'Резервная копия в Google Drive', settings_restore:'Восстановить из Google Drive', settings_changepin:'Сменить PIN',
+        auth_title_login:'С возвращением', auth_subtitle_login:'Войдите в свою бизнес-книгу', auth_title_signup:'Создайте свою книгу', auth_subtitle_signup:'Настройте свой бизнес-аккаунт', auth_btn_login:'Войти', auth_btn_create:'Создать аккаунт', auth_toggle_to_signup:'Создать новый бизнес-аккаунт', auth_toggle_to_login:'Уже есть аккаунт? Войти' }
 };
 const LANG_KEY = 'khataProLang';
 
@@ -1030,11 +1054,14 @@ function setLanguage(code){
   const dict = I18N[code];
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const key = el.getAttribute('data-i18n');
-    if(dict[key]) el.textContent = dict[key];
+    const val = (dict[key] !== undefined) ? dict[key] : I18N.en[key];
+    if(val !== undefined) el.textContent = val;
   });
   document.documentElement.dir = RTL_LANGS.includes(code) ? 'rtl' : 'ltr';
   const sel = document.getElementById('lang-select');
   if(sel) sel.value = code;
+  const selLogin = document.getElementById('lang-select-login');
+  if(selLogin) selLogin.value = code;
 }
 
 function initLanguage(){
@@ -1283,11 +1310,14 @@ function saveAuth(a){ localStorage.setItem(AUTH_KEY, JSON.stringify(a)); }
 
 function toggleAuthMode(){
   authMode = authMode === 'login' ? 'signup' : 'login';
+  const code = localStorage.getItem(LANG_KEY) || 'en';
+  const dict = I18N[code] || I18N.en;
+  const t = (k)=> (dict[k] !== undefined ? dict[k] : I18N.en[k]);
   document.getElementById('auth-bizname-field').style.display = authMode==='signup' ? 'block' : 'none';
-  document.getElementById('auth-title').textContent = authMode==='signup' ? 'Create your khata' : 'Welcome back';
-  document.getElementById('auth-subtitle').textContent = authMode==='signup' ? 'Set up your business account' : 'Login to your business khata';
-  document.getElementById('auth-submit-btn').textContent = authMode==='signup' ? 'Create account' : 'Login';
-  document.getElementById('auth-toggle-btn').textContent = authMode==='signup' ? 'Already have an account? Login' : 'Create new business account';
+  document.getElementById('auth-title').textContent = authMode==='signup' ? t('auth_title_signup') : t('auth_title_login');
+  document.getElementById('auth-subtitle').textContent = authMode==='signup' ? t('auth_subtitle_signup') : t('auth_subtitle_login');
+  document.getElementById('auth-submit-btn').textContent = authMode==='signup' ? t('auth_btn_create') : t('auth_btn_login');
+  document.getElementById('auth-toggle-btn').textContent = authMode==='signup' ? t('auth_toggle_to_login') : t('auth_toggle_to_signup');
 }
 
 function doAuth(){
