@@ -1,0 +1,17 @@
+{
+  "name": "khata-pro",
+  "version": "1.0.0",
+  "description": "Khata Pro - Digital Ledger App",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx cap open android"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^5.7.0",
+    "@capacitor/cli": "^5.7.0",
+    "@capacitor/core": "^5.7.0",
+    "@codetrix-studio/capacitor-google-auth": "^3.3.5"
+  }
+}

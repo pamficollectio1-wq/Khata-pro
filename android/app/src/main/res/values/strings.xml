@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Khata Pro</string>
+    <string name="title_activity_main">Khata Pro</string>
+    <string name="package_name">com.khatapro.app</string>
+    <string name="custom_url_scheme">com.khatapro.app</string>
+    <string name="server_client_id">509942567397-29a8dkj2dtf1f54ph29dd79ol66qf6i4.apps.googleusercontent.com</string>
+</resources>
