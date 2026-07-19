@@ -156,7 +156,7 @@
       0 -4px 8px rgba(3,105,161,0.5) inset,
       0 8px 16px -3px rgba(14,165,233,0.55),
       0 0 0 3px rgba(56,189,248,0.22);
-    transition:box-shadow .35s ease, transform .35s cubic-bezier(.34,1.56,.64,1), background .35s ease;
+    transition:box-shadow .22s ease, transform .22s cubic-bezier(.34,1.56,.64,1), background .22s ease;
   }
   nav.bottom button.active .ic::before{opacity:1;}
   nav.bottom button.active{color:var(--txt); background:rgba(14,165,233,0.06);}
@@ -174,12 +174,13 @@
 
   .view{
     position:absolute; inset:0; display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden;
-    opacity:0; transform:translateY(16px) scale(0.985); pointer-events:none; z-index:1;
-    transition:opacity .38s cubic-bezier(.22,1,.36,1), transform .42s cubic-bezier(.22,1,.36,1), filter .38s ease;
-    filter:blur(2px);
+    opacity:0; transform:translateY(10px) scale(0.99); pointer-events:none; z-index:1;
+    transition:opacity .18s ease-out, transform .2s cubic-bezier(.22,1,.36,1);
+    will-change:opacity, transform;
+    contain:layout style;
   }
-  .view.active{opacity:1; transform:translateY(0) scale(1); pointer-events:auto; z-index:3; filter:blur(0);}
-  .view.leaving{opacity:0; transform:translateY(-14px) scale(0.985); z-index:2; filter:blur(2px); transition:opacity .3s ease, transform .34s cubic-bezier(.4,0,1,1), filter .3s ease;}
+  .view.active{opacity:1; transform:translateY(0) scale(1); pointer-events:auto; z-index:3;}
+  .view.leaving{opacity:0; transform:translateY(-8px) scale(0.99); z-index:2; transition:opacity .14s ease-in, transform .16s ease-in;}
 
   /* Onboarding / Auth */
   .center-screen{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 28px; position:relative; z-index:2;}
@@ -417,7 +418,18 @@
       <div class="brand"><div class="mark">khata<span>Pro</span></div><div class="pro-tag">PRO</div></div>
       <div style="display:flex; gap:10px; align-items:center;">
         <button class="back bell-badge" onclick="switchView('notifications')">🔔<span class="dot-badge"></span></button>
-        <button class="lang-toggle" onclick="toggleLang()">EN/اردو</button>
+        <select id="lang-select-dashboard" onchange="setLanguage(this.value)" style="background:var(--glass); border:1px solid var(--glass-brd); border-radius:8px; padding:6px 8px; color:var(--txt); font-size:12px;">
+          <option value="en">🌐 EN</option>
+          <option value="ur">اردو</option>
+          <option value="hi">हिन्दी</option>
+          <option value="ar">العربية</option>
+          <option value="es">ES</option>
+          <option value="fr">FR</option>
+          <option value="zh">中文</option>
+          <option value="pt">PT</option>
+          <option value="bn">বাংলা</option>
+          <option value="ru">RU</option>
+        </select>
       </div>
     </header>
     <main>
@@ -429,6 +441,21 @@
       <div class="summary">
         <div class="glass sum-card give"><div class="glow"></div><div class="label" data-i18n="label_you_give">You Give</div><div class="amt" id="dash-give-amt">₨ 0</div><div class="trend">&nbsp;</div></div>
         <div class="glass sum-card get"><div class="glow"></div><div class="label" data-i18n="label_you_got">You Got</div><div class="amt" id="dash-get-amt">₨ 0</div><div class="trend">&nbsp;</div></div>
+      </div>
+
+      <div class="glass report-card" style="display:flex; align-items:center; gap:18px; padding:18px;">
+        <div style="position:relative; width:96px; height:96px; flex-shrink:0;">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle cx="48" cy="48" r="42" fill="none" stroke="rgba(120,120,130,0.15)" stroke-width="10"></circle>
+            <circle id="dash-donut-ring" cx="48" cy="48" r="42" fill="none" stroke="var(--green)" stroke-width="10" stroke-linecap="round" transform="rotate(-90 48 48)"></circle>
+          </svg>
+          <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--txt-dim);" id="dash-donut-pct">0%</div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11.5px; color:var(--txt-dim); margin-bottom:3px;">Net remaining</div>
+          <div style="font-family:'SF Mono',Consolas,'Roboto Mono',monospace; font-size:21px; font-weight:700;" id="dash-net-amt">₨ 0</div>
+          <div style="font-size:11px; color:var(--txt-dim); margin-top:2px;" id="dash-net-label">All settled</div>
+        </div>
       </div>
 
       <div class="quick-actions">
@@ -487,8 +514,8 @@
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top plain"><button class="back" onclick="switchView('customers')">←</button><div class="screen-title" id="ac-screen-title">Add Customer</div></header>
     <main>
-      <div class="avatar-picker">
-        <div class="icon3d violet" style="width:76px; height:76px; border-radius:24px; font-size:28px; margin:0 auto;">🧑</div>
+      <div class="avatar-picker" onclick="attachCustomerPhoto()" style="cursor:pointer;">
+        <div class="icon3d violet" id="ac-photo-preview" style="width:76px; height:76px; border-radius:24px; font-size:28px; margin:0 auto; background-size:cover; background-position:center;">🧑</div>
         <div class="ap-label">Add photo (optional)</div>
       </div>
       <div class="field"><label>Full name</label><input id="ac-name" type="text" placeholder="e.g. Ahmed Furniture House"></div>
@@ -499,6 +526,11 @@
         <button id="oc-get" onclick="setOpenMode('get')">I Owe Them</button>
       </div>
       <div class="field"><label>Notes (optional)</label><input id="ac-notes" type="text" placeholder="Shop area, category, etc."></div>
+      <div style="display:flex; gap:10px; margin-bottom:8px;">
+        <button class="btn btn-outline" type="button" style="flex:1;" onclick="attachCustomerNotePhoto()">📷 Add photo to note</button>
+        <button class="btn btn-outline" type="button" id="ac-note-voice-btn" style="flex:1;" onclick="toggleCustomerNoteVoiceRecording()">🎤 Voice note</button>
+      </div>
+      <div id="ac-note-attachment-preview" style="margin-bottom:14px;"></div>
       <button class="btn btn-primary" id="ac-save-btn" onclick="saveCustomer()" data-i18n="btn_save_customer">Save Customer</button>
     </main>
   </div>
@@ -509,18 +541,28 @@
     <div class="status"><span class="status-time">9:41</span><span><span class="status-batt">100%</span></span></div>
     <header class="top plain"><button class="back" onclick="switchView('dashboard')">←</button><div class="screen-title" data-i18n="title_new_entry">New Entry</div></header>
     <main>
-      <div class="field"><label>Customer</label><input id="entry-customer" type="text" list="customer-list" placeholder="Search or type new customer name"></div>
-      <datalist id="customer-list"></datalist>
+      <div class="field" style="position:relative;">
+        <label>Customer <button id="entry-customer-change-btn" onclick="unlockEntryCustomer()" style="display:none; background:none; border:none; color:var(--violet); font-size:11px; cursor:pointer; text-decoration:underline;">change</button></label>
+        <input id="entry-customer" type="text" autocomplete="off" placeholder="Search or type new customer name" oninput="onEntryCustomerInput(this.value)" onfocus="onEntryCustomerFocus()" onblur="setTimeout(hideEntrySuggestions, 200)">
+        <div id="entry-customer-suggestions" style="display:none; position:absolute; left:0; right:0; top:100%; margin-top:4px; z-index:20; background:var(--glass); backdrop-filter:blur(20px); border:1px solid var(--glass-brd); border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,0.12); max-height:260px; overflow-y:auto;"></div>
+      </div>
       <div class="glass toggle-row">
         <button class="on" id="mode-give" onclick="setMode('give')">You Gave</button>
         <button id="mode-get" onclick="setMode('get')">You Got</button>
       </div>
-      <div class="keypad-amt">₨ <input id="amt-input" type="number" inputmode="decimal" placeholder="0" style="background:transparent; border:none; outline:none; width:55%; font:inherit; color:var(--txt); -webkit-text-fill-color:var(--txt);"></div>
+      <div class="keypad-amt"><span id="entry-amt-currency-symbol">₨</span> <input id="amt-input" type="number" inputmode="decimal" placeholder="0" style="background:transparent; border:none; outline:none; width:55%; font:inherit; color:var(--txt); -webkit-text-fill-color:var(--txt);"></div>
       <div class="quick-notes">
         <span class="chip glass" onclick="setNote('Cash')">Cash</span><span class="chip glass" onclick="setNote('Bank transfer')">Bank transfer</span><span class="chip glass" onclick="setNote('Goods')">Goods</span><span class="chip glass" onclick="setNote('Advance')">Advance</span>
       </div>
       <div class="field"><label>Note (optional)</label><input id="entry-note" type="text" placeholder="e.g. Sofa set delivery"></div>
       <div class="field"><label>Date</label><input id="entry-date" type="text" readonly></div>
+
+      <div style="display:flex; gap:10px; margin-bottom:14px;">
+        <button class="btn btn-outline" style="flex:1;" onclick="attachEntryPhoto()">📷 Add photo</button>
+        <button class="btn btn-outline" id="entry-voice-note-btn" style="flex:1;" onclick="toggleEntryVoiceNoteRecording()">🎤 Voice note</button>
+      </div>
+      <div id="entry-attachment-preview"></div>
+
       <button class="mic" id="voice-entry-btn" style="width:100%; border-radius:16px; height:52px; margin-bottom:14px;" onclick="startVoiceEntry()">🎙 Speak this entry instead</button>
       <button class="btn btn-primary" onclick="saveEntry()" data-i18n="btn_save_entry">Save Entry</button>
     </main>
@@ -539,6 +581,7 @@
         <button class="contact-btn" onclick="editCurrentCustomer()">✏️</button>
         <button class="contact-btn" onclick="deleteCurrentCustomer()" style="color:var(--red);">🗑️</button>
       </div>
+      <div id="ledger-customer-note" style="margin-bottom:14px;"></div>
       <div class="progress-ring">
         <svg width="110" height="110">
           <defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0EA5E9"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient></defs>
@@ -551,9 +594,20 @@
         <div class="glass sum-card give"><div class="glow"></div><div class="label">Total Gave</div><div class="amt" id="ledger-gave-amt">₨ 0</div></div>
         <div class="glass sum-card get"><div class="glow"></div><div class="label">Total Got</div><div class="amt" id="ledger-got-amt">₨ 0</div></div>
       </div>
-      <div class="section-title">Entries<button class="add-small" onclick="switchView('newentry')">+ Add</button></div>
+      <div class="section-title">Entries<button class="add-small" onclick="openNewEntryForCustomer(currentLedgerCustomerId)">+ Add</button></div>
       <div class="glass report-card" style="padding:0 16px;" id="ledger-entries"></div>
+
+      <div class="section-title" style="margin-top:18px;">Reminders<button class="add-small" onclick="addReminderForCurrentCustomer()">+ Add</button></div>
+      <div class="glass report-card" style="padding:0 16px;" id="ledger-reminders"></div>
+
       <button class="btn btn-outline" onclick="whatsappCustomer()" style="margin-top:16px;">📤 Send reminder on WhatsApp</button>
+
+      <div class="section-title" style="margin-top:18px;">Export this customer's record</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-outline" style="flex:1;" onclick="exportCustomerPdf()">📄 PDF</button>
+        <button class="btn btn-outline" style="flex:1;" onclick="exportCustomerWhatsApp()">💬 WhatsApp</button>
+        <button class="btn btn-outline" style="flex:1;" onclick="exportCustomerSms()">✉️ SMS</button>
+      </div>
     </main>
   </div>
 
@@ -563,6 +617,19 @@
     <header class="top plain"><div class="screen-title" data-i18n="title_reports">Reports</div></header>
     <main>
       <div class="glass report-card">
+        <div class="card-eyebrow">Export range</div>
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
+          <input id="report-date-from" type="date" style="flex:1; background:var(--glass); border:1px solid var(--glass-brd); border-radius:8px; padding:8px; font-size:12.5px; color:var(--txt);">
+          <span style="color:var(--txt-dim); font-size:12px;">to</span>
+          <input id="report-date-to" type="date" style="flex:1; background:var(--glass); border:1px solid var(--glass-brd); border-radius:8px; padding:8px; font-size:12.5px; color:var(--txt);">
+        </div>
+        <div style="font-size:11px; color:var(--txt-dim);">Leave both blank to export all records.</div>
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <button class="btn btn-primary" style="flex:1;" onclick="exportReportPdf()">⬇ Export (PDF)</button>
+          <button class="btn btn-outline" style="flex:1;" onclick="clearReportDateRange()">Clear range</button>
+        </div>
+      </div>
+      <div class="glass report-card">
         <div class="card-eyebrow">By customer (all-time)</div>
         <div id="report-bars"></div>
       </div>
@@ -570,7 +637,10 @@
         <div class="card-eyebrow">Collection reminders</div>
         <div id="report-reminders" style="font-size:12.5px; line-height:2;"></div>
       </div>
-      <button class="btn btn-outline" onclick="exportReportPdf()">⬇ Export report (PDF)</button>
+      <div class="glass report-card">
+        <div class="card-eyebrow">My reminders</div>
+        <div id="report-my-reminders"></div>
+      </div>
     </main>
     <nav class="bottom glass">
       <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span><span data-i18n="nav_home">Home</span></button>
@@ -641,7 +711,20 @@
             <option value="ru">Русский (Russian)</option>
           </select>
         </div>
-        <div class="setting-row"><span data-i18n="settings_currency">Currency</span><span style="color:var(--txt-dim);">PKR ₨</span></div>
+        <div class="setting-row"><span data-i18n="settings_currency">Currency</span>
+          <select id="currency-select" onchange="setCurrency(this.value)" style="background:var(--glass); border:1px solid var(--glass-brd); border-radius:8px; padding:6px 8px; color:var(--txt); font-size:12.5px;">
+            <option value="PKR">₨ PKR — Pakistani Rupee</option>
+            <option value="INR">₹ INR — Indian Rupee</option>
+            <option value="USD">$ USD — US Dollar</option>
+            <option value="EUR">€ EUR — Euro</option>
+            <option value="GBP">£ GBP — British Pound</option>
+            <option value="SAR">SR SAR — Saudi Riyal</option>
+            <option value="AED">AED — UAE Dirham</option>
+            <option value="BDT">৳ BDT — Bangladeshi Taka</option>
+            <option value="CNY">¥ CNY — Chinese Yuan</option>
+            <option value="NGN">₦ NGN — Nigerian Naira</option>
+          </select>
+        </div>
         <div class="setting-row"><span data-i18n="settings_voice">Voice entry</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
         <div class="setting-row"><span data-i18n="settings_whatsapp">Auto WhatsApp reminders</span><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
         <div class="setting-row"><span data-i18n="settings_offline">Offline mode</span><div class="switch" onclick="this.classList.toggle('on')"></div></div>
@@ -656,7 +739,16 @@
         <div class="setting-row" onclick="checkForUpdates(true)" style="cursor:pointer;"><span data-i18n="settings_checkupdate">Check for updates</span><span>›</span></div>
         <div class="setting-row" onclick="logout()" style="cursor:pointer; color:var(--red);"><span data-i18n="settings_logout">Log out</span><span>›</span></div>
       </div>
-      <button class="btn btn-outline" onclick="switchView('login')">Log out</button>
+
+      <div class="section-title" style="margin-top:18px;">Reminder message</div>
+      <div class="glass report-card">
+        <div style="font-size:11.5px; color:var(--txt-dim); margin-bottom:8px;">Used when you tap "Send reminder on WhatsApp". Use {name} and {amount} — they'll be replaced automatically. Leave blank to use the default for your selected language.</div>
+        <textarea id="settings-reminder-msg" rows="3" style="width:100%; background:var(--glass); border:1px solid var(--glass-brd); border-radius:10px; padding:10px; font-size:13px; color:var(--txt); resize:vertical;" placeholder="Hi {name}, a friendly reminder — your pending balance is {amount}. Thank you!"></textarea>
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <button class="btn btn-primary" style="flex:1;" onclick="saveReminderMsgFromSettings()">Save</button>
+          <button class="btn btn-outline" style="flex:1;" onclick="resetReminderMsgToDefault()">Reset to default</button>
+        </div>
+      </div>
     </main>
     <nav class="bottom glass">
       <button data-tab="dashboard" onclick="switchView('dashboard', this)"><span class="ic"><span>🏠</span></span><span data-i18n="nav_home">Home</span></button>
@@ -717,7 +809,7 @@ function collectLocalDataForBackup(){
 
 function applyRestoredData(data){
   if(!data || (!data.customers && !data.entries)) return;
-  KP = { customers: data.customers || [], entries: data.entries || [] };
+  KP = { customers: data.customers || [], entries: data.entries || [], reminders: data.reminders || [] };
   saveStore();
   renderAll();
 }
@@ -928,24 +1020,97 @@ function buildSimplePdf(lines){
   return pdf;
 }
 
+function buildCustomerRecordLines(customerId){
+  const c = KP.customers.find(x=>x.id===customerId);
+  if(!c) return [];
+  const auth = loadAuth();
+  const bizname = (auth && auth.bizname) || 'Khata Pro';
+  const entries = KP.entries.filter(e=>e.customerId===customerId).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const bal = customerBalance(c);
+  const lines = [];
+  lines.push(bizname + ' — Customer Record');
+  lines.push(c.name + (c.phone ? ' (' + c.phone + ')' : ''));
+  lines.push('Generated: ' + new Date().toLocaleString());
+  lines.push('');
+  lines.push('Current balance: ' + (bal>=0 ? 'You got ' : 'You give ') + money(bal));
+  lines.push('');
+  lines.push('Entries:');
+  entries.forEach(e=>{
+    const sign = e.type==='give' ? '-' : '+';
+    lines.push('  ' + fmtDate(e.date) + '  ' + sign + money(e.amount) + (e.note ? '  (' + e.note + ')' : ''));
+  });
+  if(!entries.length) lines.push('  No entries yet.');
+  return lines;
+}
+
+function exportCustomerPdf(){
+  if(!currentLedgerCustomerId) return;
+  const lines = buildCustomerRecordLines(currentLedgerCustomerId);
+  const c = KP.customers.find(x=>x.id===currentLedgerCustomerId);
+  const pdfString = buildSimplePdf(lines);
+  const bytes = new Uint8Array(pdfString.length);
+  for(let i=0;i<pdfString.length;i++) bytes[i] = pdfString.charCodeAt(i) & 0xff;
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'khata-' + (c ? c.name.replace(/[^a-z0-9]/gi,'-') : 'customer') + '-' + new Date().toISOString().slice(0,10) + '.pdf';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 5000);
+}
+
+function exportCustomerWhatsApp(){
+  if(!currentLedgerCustomerId) return;
+  const c = KP.customers.find(x=>x.id===currentLedgerCustomerId);
+  if(!c || !c.phone){ alert('No phone number saved for this customer yet.'); return; }
+  const text = buildCustomerRecordLines(currentLedgerCustomerId).join('\n');
+  const digits = c.phone.replace(/[^0-9]/g,'');
+  window.location.href = `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
+}
+
+function exportCustomerSms(){
+  if(!currentLedgerCustomerId) return;
+  const c = KP.customers.find(x=>x.id===currentLedgerCustomerId);
+  if(!c || !c.phone){ alert('No phone number saved for this customer yet.'); return; }
+  const text = buildCustomerRecordLines(currentLedgerCustomerId).join('\n');
+  window.location.href = `sms:${c.phone}?body=${encodeURIComponent(text)}`;
+}
+
 function exportReportPdf(){
   const auth = loadAuth();
   const bizname = (auth && auth.bizname) || 'Khata Pro';
+  const fromEl = document.getElementById('report-date-from');
+  const toEl = document.getElementById('report-date-to');
+  const fromDate = fromEl && fromEl.value ? new Date(fromEl.value + 'T00:00:00') : null;
+  const toDate = toEl && toEl.value ? new Date(toEl.value + 'T23:59:59') : null;
+  const inRange = (iso)=>{
+    const d = new Date(iso);
+    if(fromDate && d < fromDate) return false;
+    if(toDate && d > toDate) return false;
+    return true;
+  };
+
   const lines = [];
   lines.push(bizname + ' — Ledger Report');
   lines.push('Generated: ' + new Date().toLocaleString());
+  if(fromDate || toDate) lines.push('Range: ' + (fromEl.value || 'start') + ' to ' + (toEl.value || 'today'));
   lines.push('');
+
+  const entriesInRange = KP.entries.filter(e=>inRange(e.date));
   let give=0, get=0;
-  KP.customers.forEach(c=>{ const b=customerBalance(c); if(b>=0) get+=b; else give+=-b; });
+  entriesInRange.forEach(e=>{ if(e.type==='give') give+=e.amount; else get+=e.amount; });
   lines.push("Total You Got: " + money(get));
   lines.push("Total You Give: " + money(give));
   lines.push('');
-  lines.push('Customer breakdown:');
-  KP.customers.forEach(c=>{
-    const b = customerBalance(c);
-    lines.push('  ' + c.name + ' - ' + (b>=0? "You got " : "You give ") + money(b));
+  lines.push('Entries' + ((fromDate||toDate) ? ' in range' : ' (all time)') + ':');
+  entriesInRange.sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(e=>{
+    const c = KP.customers.find(x=>x.id===e.customerId);
+    const sign = e.type==='give' ? '-' : '+';
+    lines.push('  ' + fmtDate(e.date) + '  ' + (c?c.name:'Unknown') + '  ' + sign + money(e.amount) + (e.note?' ('+e.note+')':''));
   });
-  if(!KP.customers.length) lines.push('  No customers yet.');
+  if(!entriesInRange.length) lines.push('  No entries in this range.');
 
   const pdfString = buildSimplePdf(lines);
   const bytes = new Uint8Array(pdfString.length);
@@ -959,6 +1124,13 @@ function exportReportPdf(){
   a.click();
   document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url), 5000);
+}
+
+function clearReportDateRange(){
+  const fromEl = document.getElementById('report-date-from');
+  const toEl = document.getElementById('report-date-to');
+  if(fromEl) fromEl.value = '';
+  if(toEl) toEl.value = '';
 }
 
 // ----- Language switcher (real, applies to navigation/headers/key buttons).
@@ -1064,6 +1236,8 @@ function setLanguage(code){
   if(sel) sel.value = code;
   const selLogin = document.getElementById('lang-select-login');
   if(selLogin) selLogin.value = code;
+  const selDash = document.getElementById('lang-select-dashboard');
+  if(selDash) selDash.value = code;
 }
 
 function initLanguage(){
@@ -1077,9 +1251,13 @@ const STORE_KEY = 'khataProStore';
 function loadStore(){
   try{
     const raw = localStorage.getItem(STORE_KEY);
-    if(raw) return JSON.parse(raw);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(!parsed.reminders) parsed.reminders = []; // migrate old saved data that predates reminders
+      return parsed;
+    }
   }catch(e){ console.error('Failed to load store', e); }
-  return { customers: [], entries: [] };
+  return { customers: [], entries: [], reminders: [] };
 }
 function saveStore(){ localStorage.setItem(STORE_KEY, JSON.stringify(KP)); mirrorToPrefs(STORE_KEY, JSON.stringify(KP)); }
 
@@ -1090,7 +1268,37 @@ let pendingOpenMode = 'give';
 
 function uid(){ return 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
 function initials(name){ return (name||'?').trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
-function money(n){ return '₨ ' + Math.round(Math.abs(n)).toLocaleString('en-IN'); }
+const CURRENCIES = {
+  PKR: { symbol: '₨', locale: 'en-IN' },
+  INR: { symbol: '₹', locale: 'en-IN' },
+  USD: { symbol: '$', locale: 'en-US' },
+  EUR: { symbol: '€', locale: 'de-DE' },
+  GBP: { symbol: '£', locale: 'en-GB' },
+  SAR: { symbol: 'SR', locale: 'en-US' },
+  AED: { symbol: 'AED', locale: 'en-US' },
+  BDT: { symbol: '৳', locale: 'en-IN' },
+  CNY: { symbol: '¥', locale: 'zh-CN' },
+  NGN: { symbol: '₦', locale: 'en-US' }
+};
+const CURRENCY_KEY = 'khataProCurrency';
+function getCurrencyCode(){ return localStorage.getItem(CURRENCY_KEY) || 'PKR'; }
+function money(n){
+  const cur = CURRENCIES[getCurrencyCode()] || CURRENCIES.PKR;
+  return cur.symbol + ' ' + Math.round(Math.abs(n)).toLocaleString(cur.locale);
+}
+function setCurrency(code){
+  if(!CURRENCIES[code]) return;
+  localStorage.setItem(CURRENCY_KEY, code);
+  mirrorToPrefs(CURRENCY_KEY, code);
+  renderAll();
+  if(currentLedgerCustomerId) renderLedger(currentLedgerCustomerId);
+  const symEl = document.getElementById('entry-amt-currency-symbol');
+  if(symEl) symEl.textContent = CURRENCIES[code].symbol;
+}
+function initCurrencySelect(){
+  const sel = document.getElementById('currency-select');
+  if(sel) sel.value = getCurrencyCode();
+}
 function fmtDate(iso){
   const d = new Date(iso);
   return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' }) + ', ' +
@@ -1120,20 +1328,55 @@ function custCardHTML(c, delay){
   const bal = customerBalance(c);
   const type = bal >= 0 ? 'get' : 'give';
   const label = bal >= 0 ? "You got" : "You give";
+  const avatarHTML = c.photo
+    ? `<div class="icon3d violet" style="background-image:url('${c.photo}'); background-size:cover; background-position:center;"></div>`
+    : `<div class="icon3d violet">${initials(c.name)}</div>`;
   return `<div class="glass cust ${type}" data-type="${type}" style="animation-delay:${delay}s" onclick="openLedger('${c.id}')">
-    <div class="icon3d violet">${initials(c.name)}</div>
+    ${avatarHTML}
     <div class="cust-info"><div class="name">${c.name}</div><div class="meta">${lastEntryLabel(c.id)}</div></div>
     <div class="cust-amt">${money(bal)}<small>${label}</small></div>
   </div>`;
 }
 
 function renderDashboard(){
-  let give = 0, get = 0;
-  KP.customers.forEach(c=>{ const b = customerBalance(c); if(b>=0) get += b; else give += -b; });
+  // Real totals across ALL entries (money actually given out vs collected) —
+  // not just per-customer balance direction, so both cards always reflect real activity.
+  let totalGave = 0, totalGot = 0;
+  KP.entries.forEach(e=>{
+    if(e.type === 'give') totalGave += e.amount;
+    else totalGot += e.amount;
+  });
   const giveEl = document.getElementById('dash-give-amt');
   const getEl = document.getElementById('dash-get-amt');
-  if(giveEl) giveEl.textContent = money(give);
-  if(getEl) getEl.textContent = money(get);
+  if(giveEl) giveEl.textContent = money(totalGave);
+  if(getEl) getEl.textContent = money(totalGot);
+
+  // Net remaining = what's left after netting collections against what was given out.
+  // Positive (you're ahead / net receivable) shows green, negative shows red.
+  const net = totalGot - totalGave;
+  const netEl = document.getElementById('dash-net-amt');
+  const netLabelEl = document.getElementById('dash-net-label');
+  if(netEl){
+    netEl.textContent = (net >= 0 ? '' : '- ') + money(net);
+    netEl.style.color = net >= 0 ? 'var(--green)' : 'var(--red)';
+  }
+  if(netLabelEl){
+    netLabelEl.textContent = net === 0 ? 'All settled' : (net > 0 ? 'Net in your favor' : 'Net you owe overall');
+  }
+
+  // Donut: share of Got vs Give out of total activity.
+  const totalActivity = totalGave + totalGot;
+  const gotShare = totalActivity > 0 ? (totalGot / totalActivity) : 0;
+  const ring = document.getElementById('dash-donut-ring');
+  const pctEl = document.getElementById('dash-donut-pct');
+  if(ring){
+    const r = 42, circumference = 2*Math.PI*r;
+    ring.style.strokeDasharray = circumference;
+    ring.style.strokeDashoffset = circumference * (1 - gotShare);
+    ring.style.stroke = net >= 0 ? 'var(--green)' : 'var(--red)';
+    ring.style.transition = 'stroke-dashoffset 0.6s ease, stroke 0.3s ease';
+  }
+  if(pctEl) pctEl.textContent = Math.round(gotShare*100) + '%';
 
   const recent = document.getElementById('dash-recent');
   if(recent){
@@ -1174,7 +1417,19 @@ function renderLedger(customerId){
   if(!c) return;
   document.getElementById('ledger-name').textContent = c.name;
   const av = document.getElementById('ledger-avatar');
-  if(av) av.textContent = initials(c.name);
+  if(av){
+    if(c.photo){
+      av.style.backgroundImage = `url('${c.photo}')`;
+      av.style.backgroundSize = 'cover';
+      av.style.backgroundPosition = 'center';
+      av.textContent = '';
+    } else {
+      av.style.backgroundImage = '';
+      av.textContent = initials(c.name);
+    }
+  }
+  renderLedgerReminders(customerId);
+  renderLedgerCustomerNote(c);
 
   const subEl = document.getElementById('ledger-sub');
   if(subEl) subEl.textContent = 'Customer since ' + new Date(c.createdAt).toLocaleDateString('en-GB', { month:'short', year:'numeric' });
@@ -1198,23 +1453,52 @@ function renderLedger(customerId){
   const entriesEl = document.getElementById('ledger-entries');
   entriesEl.innerHTML = entries.length ? entries.map(e=>{
     const isGive = e.type==='give';
-    return `<div class="entry-row">
-      <div class="icon3d ${isGive?'red':'green'}" style="width:36px;height:36px;border-radius:11px;font-size:15px;">${isGive?'📤':'💰'}</div>
-      <div><div class="t">${e.note || (isGive?'You gave':'You got')}</div><div class="d">${fmtDate(e.date)}</div></div>
-      <div class="a" style="color:${isGive?'var(--red)':'var(--green)'};">${isGive?'-':'+'}${money(e.amount)}</div>
-      <button onclick="deleteEntry('${e.id}')" style="background:none; border:none; color:var(--txt-dim); font-size:15px; margin-left:8px; cursor:pointer;">🗑️</button>
+    const attachments = (e.photo || e.voiceNote) ? `<div style="display:flex; gap:8px; margin:6px 0 8px 46px;">
+        ${e.photo ? `<img src="${e.photo}" onclick="viewEntryPhoto('${e.photo.replace(/'/g,"\\'")}')" style="width:44px; height:44px; border-radius:9px; object-fit:cover; cursor:pointer;">` : ''}
+        ${e.voiceNote ? `<audio controls src="${e.voiceNote}" style="height:34px; max-width:180px;"></audio>` : ''}
+      </div>` : '';
+    return `<div>
+      <div class="entry-row">
+        <div class="icon3d ${isGive?'red':'green'}" style="width:36px;height:36px;border-radius:11px;font-size:15px;">${isGive?'📤':'💰'}</div>
+        <div><div class="t">${e.note || (isGive?'You gave':'You got')}</div><div class="d">${fmtDate(e.date)}</div></div>
+        <div class="a" style="color:${isGive?'var(--red)':'var(--green)'};">${isGive?'-':'+'}${money(e.amount)}</div>
+        <button onclick="deleteEntry('${e.id}')" style="background:none; border:none; color:var(--txt-dim); font-size:15px; margin-left:8px; cursor:pointer;">🗑️</button>
+      </div>
+      ${attachments}
     </div>`;
   }).join('') : `<div style="padding:16px; font-size:13px; color:var(--txt-dim);">No entries yet for this customer.</div>`;
 }
 
-function renderAll(){ renderDashboard(); renderCustomersList(); }
+function viewEntryPhoto(dataUrl){
+  const w = window.open('');
+  if(w) w.document.write(`<img src="${dataUrl}" style="max-width:100%;">`);
+}
+
+// Preload system: every screen's content is rendered here, in the background,
+// whenever data changes — NOT at the moment the user taps a tab. That means
+// switchView() just has to play the animation; the content is already sitting
+// ready in the DOM, so navigation feels instant instead of janky.
+function renderAll(){
+  renderDashboard();
+  renderCustomersList();
+  renderReports();
+  renderBusinessScreen();
+}
 
 // ----- Save actions (wired to real forms) -----
+function resetCustomerPhotoPreview(){
+  pendingCustomerPhoto = null;
+  const preview = document.getElementById('ac-photo-preview');
+  if(preview){ preview.style.backgroundImage = ''; preview.textContent = '🧑'; }
+}
+
 function openAddCustomerFresh(){
   editingCustomerId = null;
   document.getElementById('ac-screen-title').textContent = 'Add Customer';
   document.getElementById('ac-save-btn').textContent = 'Save Customer';
   resetAddCustomerForm();
+  resetCustomerPhotoPreview();
+  resetCustomerNoteAttachments();
   setOpenMode('give');
   switchView('addcustomer');
 }
@@ -1231,6 +1515,16 @@ function editCurrentCustomer(){
   document.getElementById('ac-phone').value = c.phone || '';
   document.getElementById('ac-opening').value = c.opening || '';
   document.getElementById('ac-notes').value = c.notes || '';
+  const preview = document.getElementById('ac-photo-preview');
+  if(c.photo){
+    pendingCustomerPhoto = c.photo;
+    if(preview){ preview.style.backgroundImage = `url('${c.photo}')`; preview.textContent = ''; }
+  } else {
+    resetCustomerPhotoPreview();
+  }
+  pendingCustomerNotePhoto = c.notePhoto || null;
+  pendingCustomerNoteVoice = c.noteVoice || null;
+  updateCustomerNoteAttachmentPreview();
   setOpenMode(c.openingType === 'owe_me' ? 'give' : 'get');
   switchView('addcustomer');
 }
@@ -1241,24 +1535,31 @@ function saveCustomer(){
   const phone = document.getElementById('ac-phone').value.trim();
   const opening = parseFloat(document.getElementById('ac-opening').value) || 0;
   const notes = document.getElementById('ac-notes').value.trim();
+  const photo = pendingCustomerPhoto || null;
+  const notePhoto = pendingCustomerNotePhoto || null;
+  const noteVoice = pendingCustomerNoteVoice || null;
 
   if(editingCustomerId){
     const c = KP.customers.find(x=>x.id===editingCustomerId);
-    if(c){ c.name=name; c.phone=phone; c.opening=opening; c.openingType=pendingOpenMode; c.notes=notes; }
+    if(c){ c.name=name; c.phone=phone; c.opening=opening; c.openingType=pendingOpenMode; c.notes=notes; c.photo=photo; c.notePhoto=notePhoto; c.noteVoice=noteVoice; }
     saveStore();
     editingCustomerId = null;
     document.getElementById('ac-screen-title').textContent = 'Add Customer';
     document.getElementById('ac-save-btn').textContent = 'Save Customer';
     renderAll();
     resetAddCustomerForm();
+    resetCustomerPhotoPreview();
+    resetCustomerNoteAttachments();
     openLedger(c.id);
     return;
   }
 
-  const c = { id: uid(), name, phone, notes, opening, openingType: pendingOpenMode, createdAt: new Date().toISOString() };
+  const c = { id: uid(), name, phone, notes, opening, openingType: pendingOpenMode, photo, notePhoto, noteVoice, createdAt: new Date().toISOString() };
   KP.customers.push(c);
   saveStore();
   resetAddCustomerForm();
+  resetCustomerPhotoPreview();
+  resetCustomerNoteAttachments();
   renderAll();
   switchView('customers');
 }
@@ -1280,25 +1581,161 @@ function saveEntry(){
   if(!amount || amount <= 0){ alert('Please enter a valid amount.'); return; }
   const note = document.getElementById('entry-note').value.trim();
 
-  let c = findCustomerByName(name);
+  let c = null;
+  if(lockedEntryCustomerId){
+    c = KP.customers.find(x=>x.id===lockedEntryCustomerId);
+  }
+  if(!c) c = findCustomerByName(name);
   if(!c){
-    c = { id: uid(), name, phone:'', notes:'', opening:0, openingType:'owe_me', createdAt: new Date().toISOString() };
+    c = { id: uid(), name, phone: selectedEntryContactPhone || '', notes:'', opening:0, openingType:'owe_me', createdAt: new Date().toISOString() };
     KP.customers.push(c);
   }
-  KP.entries.push({ id: uid(), customerId: c.id, type: pendingEntryMode, amount, note, date: new Date().toISOString() });
+  KP.entries.push({ id: uid(), customerId: c.id, type: pendingEntryMode, amount, note, date: new Date().toISOString(), photo: pendingEntryPhoto || null, voiceNote: pendingEntryVoiceNote || null });
   saveStore();
 
   // reset form
   nameInput.value=''; document.getElementById('amt-input').value=''; document.getElementById('entry-note').value='';
+  selectedEntryContactPhone = '';
+  lockedEntryCustomerId = null;
+  pendingEntryPhoto = null;
+  pendingEntryVoiceNote = null;
+  updateEntryAttachmentPreviews();
+  hideEntrySuggestions();
   renderAll();
   currentLedgerCustomerId = c.id;
   openLedger(c.id);
 }
 
-function refreshCustomerDatalist(){
-  const dl = document.getElementById('customer-list');
-  if(!dl) return;
-  dl.innerHTML = KP.customers.map(c=>`<option value="${c.name}"></option>`).join('');
+// ===== Opening New Entry directly from an already-open customer (no re-searching) =====
+let lockedEntryCustomerId = null;
+
+function openNewEntryForCustomer(customerId){
+  const c = KP.customers.find(x=>x.id===customerId);
+  if(!c){ switchView('newentry'); return; }
+  lockedEntryCustomerId = customerId;
+  switchView('newentry');
+  const input = document.getElementById('entry-customer');
+  input.value = c.name;
+  input.readOnly = true;
+  input.style.background = 'rgba(120,120,130,0.08)';
+  const changeBtn = document.getElementById('entry-customer-change-btn');
+  if(changeBtn) changeBtn.style.display = 'inline';
+  hideEntrySuggestions();
+}
+
+function unlockEntryCustomer(){
+  lockedEntryCustomerId = null;
+  const input = document.getElementById('entry-customer');
+  input.readOnly = false;
+  input.style.background = '';
+  input.value = '';
+  input.focus();
+  const changeBtn = document.getElementById('entry-customer-change-btn');
+  if(changeBtn) changeBtn.style.display = 'none';
+}
+
+// ===== Live customer search on New Entry (app customers + device contacts) =====
+let deviceContactsCache = null; // null = not yet loaded, [] = loaded but empty/denied
+let selectedEntryContactPhone = ''; // remembers phone if a device contact (not yet a customer) was picked
+
+function looksLikePhoneNumber(text){
+  const digits = (text.match(/[0-9]/g) || []).length;
+  return digits >= 5 && digits >= text.replace(/[\s()+\-]/g,'').length * 0.7;
+}
+
+async function ensureDeviceContactsLoaded(){
+  if(deviceContactsCache !== null) return; // already loaded (or already tried)
+  const Contacts = getContactsPlugin();
+  if(!Contacts){ deviceContactsCache = []; return; }
+  try{
+    const perm = await Contacts.requestPermissions();
+    if(perm.contacts !== 'granted'){ deviceContactsCache = []; return; }
+    const result = await Contacts.getContacts({ projection: { name: true, phones: true } });
+    deviceContactsCache = (result.contacts || []).map(c=>({
+      name: (c.name && c.name.display) || '',
+      phone: (c.phones && c.phones[0] && c.phones[0].number) || ''
+    })).filter(c=>c.name);
+  }catch(e){
+    console.error('Loading device contacts failed', e);
+    deviceContactsCache = [];
+  }
+}
+
+function onEntryCustomerFocus(){
+  ensureDeviceContactsLoaded().then(()=>{
+    // re-render suggestions once contacts finish loading, in case the user is still focused
+    onEntryCustomerInput(document.getElementById('entry-customer').value);
+  });
+}
+
+function selectEntrySuggestion(name, phone){
+  document.getElementById('entry-customer').value = name;
+  selectedEntryContactPhone = phone || '';
+  hideEntrySuggestions();
+}
+
+function hideEntrySuggestions(){
+  const box = document.getElementById('entry-customer-suggestions');
+  if(box){ box.style.display = 'none'; box.innerHTML=''; }
+}
+
+function goAddCustomerFromEntryText(text){
+  hideEntrySuggestions();
+  editingCustomerId = null;
+  document.getElementById('ac-screen-title').textContent = 'Add Customer';
+  document.getElementById('ac-save-btn').textContent = 'Save Customer';
+  resetAddCustomerForm();
+  resetCustomerPhotoPreview();
+  resetCustomerNoteAttachments();
+  if(looksLikePhoneNumber(text)){
+    document.getElementById('ac-phone').value = text.trim();
+  } else {
+    document.getElementById('ac-name').value = text.trim();
+  }
+  setOpenMode('give');
+  switchView('addcustomer');
+}
+
+function onEntryCustomerInput(value){
+  selectedEntryContactPhone = '';
+  const box = document.getElementById('entry-customer-suggestions');
+  const q = value.trim().toLowerCase();
+  if(!q){ hideEntrySuggestions(); return; }
+
+  const appMatches = KP.customers
+    .filter(c=>c.name.toLowerCase().includes(q) || (c.phone||'').includes(q))
+    .slice(0,5)
+    .map(c=>({ name:c.name, phone:c.phone, isExisting:true }));
+
+  const existingNames = new Set(appMatches.map(m=>m.name.toLowerCase()));
+  const contactMatches = (deviceContactsCache || [])
+    .filter(c=> !existingNames.has(c.name.toLowerCase()) && (c.name.toLowerCase().includes(q) || (c.phone||'').includes(q)))
+    .slice(0,5)
+    .map(c=>({ name:c.name, phone:c.phone, isExisting:false }));
+
+  const allMatches = [...appMatches, ...contactMatches];
+  const exactMatch = allMatches.some(m=>m.name.toLowerCase() === q);
+
+  let html = allMatches.map(m=>`
+    <div onclick="selectEntrySuggestion('${m.name.replace(/'/g,"\\'")}','${(m.phone||'').replace(/'/g,"\\'")}')" style="padding:11px 14px; display:flex; align-items:center; gap:10px; cursor:pointer; border-bottom:1px solid var(--glass-brd);">
+      <div class="icon3d ${m.isExisting?'violet':'cyan'}" style="width:30px;height:30px;border-radius:9px;font-size:12px;">${initials(m.name)}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px; font-weight:600;">${m.name}</div>
+        <div style="font-size:11px; color:var(--txt-dim);">${m.isExisting ? 'Existing customer' : (m.phone || 'Device contact')}</div>
+      </div>
+    </div>`).join('');
+
+  if(!exactMatch && q.length >= 2){
+    html += `<div onclick="goAddCustomerFromEntryText('${value.replace(/'/g,"\\'")}')" style="padding:11px 14px; display:flex; align-items:center; gap:10px; cursor:pointer; color:var(--violet);">
+      <div style="width:30px;height:30px;border-radius:9px;background:rgba(110,116,122,0.12); display:flex; align-items:center; justify-content:center; font-size:16px;">➕</div>
+      <div style="font-size:13px; font-weight:600;">Add "${value}" as new customer</div>
+    </div>`;
+  }
+
+  if(box){
+    box.innerHTML = html;
+    box.style.display = html ? 'block' : 'none';
+  }
 }
 
 // ----- Auth (real local account, PIN-protected) -----
@@ -1375,7 +1812,7 @@ async function restoreFromPrefsIfNeeded(key){
     }
   }catch(e){ console.error('Prefs restore failed for', key, e); }
 }
-const DURABLE_KEYS = ['khataProStore','khataProAuth','khataProStaff','khataProLang','khataProRemindersOn','khataProLoggedIn'];
+const DURABLE_KEYS = ['khataProStore','khataProAuth','khataProStaff','khataProLang','khataProRemindersOn','khataProLoggedIn','khataProReminderMsgTemplate','khataProCurrency'];
 async function bootRestoreDurableData(){
   await Promise.all(DURABLE_KEYS.map(restoreFromPrefsIfNeeded));
 }
@@ -1425,6 +1862,8 @@ function deleteCurrentCustomer(){
   if(!confirm(`Delete ${c.name} and all their entries? This cannot be undone.`)) return;
   KP.customers = KP.customers.filter(x=>x.id!==c.id);
   KP.entries = KP.entries.filter(x=>x.customerId!==c.id);
+  KP.reminders.filter(r=>r.customerId===c.id).forEach(r=>cancelReminderNotification(r.notifId));
+  KP.reminders = KP.reminders.filter(x=>x.customerId!==c.id);
   saveStore();
   renderAll();
   switchView('customers');
@@ -1444,14 +1883,66 @@ function callCustomer(){
   else{ alert('No phone number saved for this customer yet.'); }
 }
 
+// ===== Customizable reminder message (Settings) =====
+// Default wording per language, used unless the person has typed their own custom message.
+const DEFAULT_REMINDER_MSG = {
+  en: 'Hi {name}, a friendly reminder — your pending balance is {amount}. Thank you!',
+  ur: 'ہیلو {name}، ایک دوستانہ یاد دہانی — آپ کا واجب الادا بیلنس {amount} ہے۔ شکریہ!',
+  hi: 'नमस्ते {name}, एक विनम्र अनुस्मारक — आपका बकाया शेष {amount} है। धन्यवाद!',
+  ar: 'مرحباً {name}، تذكير ودي — رصيدك المستحق هو {amount}. شكراً لك!',
+  es: 'Hola {name}, un recordatorio amistoso — tu saldo pendiente es {amount}. ¡Gracias!',
+  fr: 'Bonjour {name}, un rappel amical — votre solde en attente est de {amount}. Merci !',
+  zh: '你好 {name}，友情提醒 — 您的待付余额为 {amount}。谢谢！',
+  pt: 'Ola {name}, um lembrete amigavel — seu saldo pendente e {amount}. Obrigado!',
+  bn: 'হ্যালো {name}, একটি বন্ধুত্বপূর্ণ অনুস্মারক — আপনার বকেয়া ব্যালেন্স {amount}। ধন্যবাদ!',
+  ru: 'Здравствуйте, {name}, дружеское напоминание — ваш остаток задолженности {amount}. Спасибо!'
+};
+const REMINDER_MSG_KEY = 'khataProReminderMsgTemplate';
+
+function getReminderMsgTemplate(){
+  const custom = localStorage.getItem(REMINDER_MSG_KEY);
+  if(custom) return custom;
+  const code = localStorage.getItem(LANG_KEY) || 'en';
+  return DEFAULT_REMINDER_MSG[code] || DEFAULT_REMINDER_MSG.en;
+}
+
+function buildReminderMessage(customerName, amountText){
+  return getReminderMsgTemplate()
+    .replace(/\{name\}/g, customerName)
+    .replace(/\{amount\}/g, amountText);
+}
+
+function loadReminderMsgIntoSettings(){
+  const el = document.getElementById('settings-reminder-msg');
+  if(el) el.value = localStorage.getItem(REMINDER_MSG_KEY) || getReminderMsgTemplate();
+}
+
+function saveReminderMsgFromSettings(){
+  const el = document.getElementById('settings-reminder-msg');
+  if(!el) return;
+  const value = el.value.trim();
+  if(value){
+    localStorage.setItem(REMINDER_MSG_KEY, value);
+    mirrorToPrefs(REMINDER_MSG_KEY, value);
+  } else {
+    localStorage.removeItem(REMINDER_MSG_KEY);
+    mirrorToPrefs(REMINDER_MSG_KEY, '');
+  }
+  alert('Reminder message saved.');
+}
+
+function resetReminderMsgToDefault(){
+  localStorage.removeItem(REMINDER_MSG_KEY);
+  mirrorToPrefs(REMINDER_MSG_KEY, '');
+  loadReminderMsgIntoSettings();
+}
+
 function whatsappCustomer(){
   const c = KP.customers.find(x=>x.id===currentLedgerCustomerId);
   if(!c || !c.phone){ alert('No phone number saved for this customer yet.'); return; }
   const bal = customerBalance(c);
   const digits = c.phone.replace(/[^0-9]/g,'');
-  const msg = bal >= 0
-    ? `Hi ${c.name}, a friendly reminder — your pending balance is ${money(bal)}. Thank you!`
-    : `Hi ${c.name}, just confirming — we owe you ${money(-bal)} on our ledger.`;
+  const msg = buildReminderMessage(c.name, money(Math.abs(bal)));
   window.location.href = `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`;
 }
 
@@ -1477,6 +1968,130 @@ function renderReports(){
   remindersEl.innerHTML = owedToYou.length
     ? owedToYou.slice(0,5).map(r=>`📌 ${r.c.name} — ${money(r.bal)} pending`).join('<br>')
     : 'Nothing pending — everyone is settled up 🎉';
+
+  renderMyReminders();
+}
+
+// ===== Real reminders (create/edit/delete, visible in both ledger and Reports) =====
+function fmtReminderDate(iso){
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+function reminderRowHTML(r, showCustomerName){
+  const c = KP.customers.find(x=>x.id===r.customerId);
+  const overdue = new Date(r.dueDate) < new Date(new Date().toDateString());
+  return `<div class="entry-row">
+    <div class="icon3d ${overdue?'red':'gold'}" style="width:36px;height:36px;border-radius:11px;font-size:15px;">⏰</div>
+    <div style="flex:1;">
+      <div class="t">${r.note}${showCustomerName && c ? ' — ' + c.name : ''}</div>
+      <div class="d" style="${overdue?'color:var(--red);':''}">${fmtReminderDate(r.dueDate)}${overdue?' (overdue)':''}</div>
+    </div>
+    <button onclick="editReminder('${r.id}')" style="background:none; border:none; color:var(--txt-dim); font-size:15px; cursor:pointer;">✏️</button>
+    <button onclick="deleteReminder('${r.id}')" style="background:none; border:none; color:var(--txt-dim); font-size:15px; margin-left:4px; cursor:pointer;">🗑️</button>
+  </div>`;
+}
+
+function renderLedgerCustomerNote(c){
+  const el = document.getElementById('ledger-customer-note');
+  if(!el) return;
+  if(!c.notes && !c.notePhoto && !c.noteVoice){ el.innerHTML = ''; return; }
+  let html = `<div class="glass report-card" style="padding:12px 14px;">`;
+  if(c.notes) html += `<div style="font-size:12.5px; margin-bottom:${(c.notePhoto||c.noteVoice)?'8px':'0'};">${c.notes}</div>`;
+  if(c.notePhoto) html += `<img src="${c.notePhoto}" onclick="viewEntryPhoto('${c.notePhoto.replace(/'/g,"\\'")}')" style="width:100%; max-height:160px; object-fit:cover; border-radius:10px; cursor:pointer; margin-bottom:${c.noteVoice?'8px':'0'};">`;
+  if(c.noteVoice) html += `<audio controls src="${c.noteVoice}" style="width:100%; height:36px;"></audio>`;
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
+function renderLedgerReminders(customerId){
+  const el = document.getElementById('ledger-reminders');
+  if(!el) return;
+  const list = KP.reminders.filter(r=>r.customerId===customerId).sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+  el.innerHTML = list.length ? list.map(r=>reminderRowHTML(r, false)).join('')
+    : `<div style="padding:16px; font-size:13px; color:var(--txt-dim);">No reminders set for this customer.</div>`;
+}
+
+function renderMyReminders(){
+  const el = document.getElementById('report-my-reminders');
+  if(!el) return;
+  const list = [...KP.reminders].sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+  el.innerHTML = list.length ? list.map(r=>reminderRowHTML(r, true)).join('')
+    : `<div style="font-size:12.5px; color:var(--txt-dim); padding:4px 0;">No reminders yet. Open any customer's ledger to add one.</div>`;
+}
+
+async function scheduleReminderNotification(reminder, customerName){
+  const due = new Date(reminder.dueDate);
+  if(isNaN(due.getTime()) || due < new Date()) return; // don't schedule for past dates
+  const LN = getNotifPlugin();
+  if(!LN) return;
+  const ok = await ensureNotifPermission();
+  if(!ok) return;
+  try{
+    await LN.schedule({ notifications: [{
+      id: reminder.notifId,
+      title: 'Reminder: ' + customerName,
+      body: reminder.note,
+      schedule: { at: due }
+    }]});
+  }catch(e){ console.error('Failed to schedule reminder notification', e); }
+}
+
+async function cancelReminderNotification(notifId){
+  const LN = getNotifPlugin();
+  if(!LN || !notifId) return;
+  try{ await LN.cancel({ notifications: [{ id: notifId }] }); }catch(e){}
+}
+
+let reminderNotifIdCounter = 20000;
+
+function addReminderForCurrentCustomer(){
+  const c = KP.customers.find(x=>x.id===currentLedgerCustomerId);
+  if(!c){ alert('Open a customer first.'); return; }
+  const note = prompt('Reminder note (e.g. "Follow up on payment"):');
+  if(!note || !note.trim()) return;
+  const dateStr = prompt('Reminder date (YYYY-MM-DD), e.g. 2026-08-15:');
+  if(!dateStr || !dateStr.trim()) return;
+  const dueDate = new Date(dateStr.trim() + 'T09:00:00');
+  if(isNaN(dueDate.getTime())){ alert('That date didn\'t look right — please use YYYY-MM-DD format.'); return; }
+
+  const reminder = { id: uid(), customerId: c.id, note: note.trim(), dueDate: dueDate.toISOString(), notifId: reminderNotifIdCounter++, createdAt: new Date().toISOString() };
+  KP.reminders.push(reminder);
+  saveStore();
+  scheduleReminderNotification(reminder, c.name);
+  renderLedgerReminders(c.id);
+  renderMyReminders();
+}
+
+function editReminder(id){
+  const r = KP.reminders.find(x=>x.id===id);
+  if(!r) return;
+  const c = KP.customers.find(x=>x.id===r.customerId);
+  const newNote = prompt('Edit reminder note:', r.note);
+  if(newNote === null) return;
+  const currentDateStr = new Date(r.dueDate).toISOString().slice(0,10);
+  const newDateStr = prompt('Edit reminder date (YYYY-MM-DD):', currentDateStr);
+  if(newDateStr === null) return;
+  const newDue = new Date(newDateStr.trim() + 'T09:00:00');
+  if(isNaN(newDue.getTime())){ alert('That date didn\'t look right — please use YYYY-MM-DD format.'); return; }
+
+  r.note = (newNote.trim() || r.note);
+  r.dueDate = newDue.toISOString();
+  saveStore();
+  cancelReminderNotification(r.notifId).then(()=>{ if(c) scheduleReminderNotification(r, c.name); });
+  if(currentLedgerCustomerId) renderLedgerReminders(currentLedgerCustomerId);
+  renderMyReminders();
+}
+
+function deleteReminder(id){
+  const r = KP.reminders.find(x=>x.id===id);
+  if(!r) return;
+  if(!confirm('Delete this reminder?')) return;
+  cancelReminderNotification(r.notifId);
+  KP.reminders = KP.reminders.filter(x=>x.id!==id);
+  saveStore();
+  if(currentLedgerCustomerId) renderLedgerReminders(currentLedgerCustomerId);
+  renderMyReminders();
 }
 function switchView(id, btn){
   const next = document.getElementById('view-'+id);
@@ -1485,7 +2100,7 @@ function switchView(id, btn){
   if(current){
     current.classList.remove('active');
     current.classList.add('leaving');
-    setTimeout(()=>{ current.classList.remove('leaving'); }, 340);
+    setTimeout(()=>{ current.classList.remove('leaving'); }, 170);
   }
   // every screen has its own copy of the bottom nav, so match by tab id
   // (not just the clicked button) so the icon lights up on whichever nav is now visible
@@ -1498,17 +2113,25 @@ function switchView(id, btn){
       next.classList.add('active');
     });
   });
-  if(id==='dashboard'){ renderDashboard(); setTimeout(animateEntries, 160); }
-  if(id==='customers'){ renderCustomersList(); setTimeout(animateEntries, 160); }
-  if(id==='reports'){ renderReports(); setTimeout(animateBars, 160); }
-  if(id==='business'){ renderBusinessScreen(); }
+  if(id==='dashboard'){ setTimeout(animateEntries, 80); }
+  if(id==='customers'){ setTimeout(animateEntries, 80); }
+  if(id==='reports'){ setTimeout(animateBars, 80); }
+  if(id==='settings'){ loadReminderMsgIntoSettings(); initCurrencySelect(); }
   if(id==='login'){
     authMode = 'signup'; toggleAuthMode(); // normalize to login mode
     document.getElementById('auth-mobile').value=''; document.getElementById('auth-pin').value='';
   }
   if(id==='newentry'){
-    refreshCustomerDatalist();
+    hideEntrySuggestions();
+    selectedEntryContactPhone = '';
+    lockedEntryCustomerId = null;
+    const custInput = document.getElementById('entry-customer');
+    if(custInput){ custInput.readOnly = false; custInput.style.background = ''; custInput.value=''; }
+    const changeBtn = document.getElementById('entry-customer-change-btn');
+    if(changeBtn) changeBtn.style.display = 'none';
     document.getElementById('entry-date').value = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) + ', Today';
+    const symEl = document.getElementById('entry-amt-currency-symbol');
+    if(symEl) symEl.textContent = CURRENCIES[getCurrencyCode()].symbol;
   }
 }
 function openLedger(customerId){
@@ -1520,7 +2143,7 @@ function openLedger(customerId){
   if(current){
     current.classList.remove('active');
     current.classList.add('leaving');
-    setTimeout(()=>{ current.classList.remove('leaving'); }, 340);
+    setTimeout(()=>{ current.classList.remove('leaving'); }, 170);
   }
   next.getBoundingClientRect();
   requestAnimationFrame(()=>{
@@ -1564,10 +2187,199 @@ function animateBars(){
   });
 }
 function animateRing(){}
-let urdu = false;
-function toggleLang(){ urdu = !urdu; }
 
 // initial render happens in the consolidated async boot sequence at the end of this file
+// ===== Camera: photos for customer profiles and entries =====
+function getCameraPlugin(){
+  return (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Camera) || null;
+}
+
+async function capturePhoto(){
+  const Camera = getCameraPlugin();
+  if(!Camera){
+    alert('Camera is only available in the built Android app, not in a plain browser preview.');
+    return null;
+  }
+  try{
+    const photo = await Camera.getPhoto({
+      quality: 70,
+      allowEditing: false,
+      resultType: 'dataUrl',
+      source: 'PROMPT' // lets the user choose Camera or Photo Library
+    });
+    return photo.dataUrl || null;
+  }catch(e){
+    console.log('Photo capture cancelled or failed', e);
+    return null;
+  }
+}
+
+let pendingCustomerPhoto = null;
+async function attachCustomerPhoto(){
+  const dataUrl = await capturePhoto();
+  if(!dataUrl) return;
+  pendingCustomerPhoto = dataUrl;
+  const preview = document.getElementById('ac-photo-preview');
+  if(preview){
+    preview.style.backgroundImage = `url('${dataUrl}')`;
+    preview.textContent = '';
+  }
+}
+
+// ===== Customer notes can also carry a photo and/or voice note, same as entries =====
+let pendingCustomerNotePhoto = null;
+let pendingCustomerNoteVoice = null;
+let customerNoteRecorder = null;
+let customerNoteRecorderChunks = [];
+let isRecordingCustomerNote = false;
+
+async function attachCustomerNotePhoto(){
+  const dataUrl = await capturePhoto();
+  if(!dataUrl) return;
+  pendingCustomerNotePhoto = dataUrl;
+  updateCustomerNoteAttachmentPreview();
+}
+
+function removeCustomerNotePhoto(){ pendingCustomerNotePhoto = null; updateCustomerNoteAttachmentPreview(); }
+function removeCustomerNoteVoice(){ pendingCustomerNoteVoice = null; updateCustomerNoteAttachmentPreview(); }
+
+function resetCustomerNoteAttachments(){
+  pendingCustomerNotePhoto = null;
+  pendingCustomerNoteVoice = null;
+  updateCustomerNoteAttachmentPreview();
+}
+
+function updateCustomerNoteAttachmentPreview(){
+  const el = document.getElementById('ac-note-attachment-preview');
+  if(!el) return;
+  let html = '';
+  if(pendingCustomerNotePhoto){
+    html += `<div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <img src="${pendingCustomerNotePhoto}" style="width:48px; height:48px; border-radius:10px; object-fit:cover;">
+      <span style="font-size:12px; color:var(--txt-dim); flex:1;">Photo attached to note</span>
+      <button onclick="removeCustomerNotePhoto()" style="background:none; border:none; color:var(--red); cursor:pointer;">✕</button>
+    </div>`;
+  }
+  if(pendingCustomerNoteVoice){
+    html += `<div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <audio controls src="${pendingCustomerNoteVoice}" style="height:36px; flex:1;"></audio>
+      <button onclick="removeCustomerNoteVoice()" style="background:none; border:none; color:var(--red); cursor:pointer;">✕</button>
+    </div>`;
+  }
+  el.innerHTML = html;
+}
+
+async function toggleCustomerNoteVoiceRecording(){
+  const btn = document.getElementById('ac-note-voice-btn');
+  if(isRecordingCustomerNote){
+    customerNoteRecorder.stop();
+    isRecordingCustomerNote = false;
+    btn.textContent = '🎤 Voice note';
+    return;
+  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    alert('Voice recording is not supported on this device/browser.');
+    return;
+  }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    customerNoteRecorder = new MediaRecorder(stream);
+    customerNoteRecorderChunks = [];
+    customerNoteRecorder.ondataavailable = (e)=>{ if(e.data.size > 0) customerNoteRecorderChunks.push(e.data); };
+    customerNoteRecorder.onstop = ()=>{
+      const blob = new Blob(customerNoteRecorderChunks, { type: 'audio/webm' });
+      const reader = new FileReader();
+      reader.onloadend = ()=>{
+        pendingCustomerNoteVoice = reader.result;
+        updateCustomerNoteAttachmentPreview();
+      };
+      reader.readAsDataURL(blob);
+      stream.getTracks().forEach(t=>t.stop());
+    };
+    customerNoteRecorder.start();
+    isRecordingCustomerNote = true;
+    btn.textContent = '⏺ Recording… tap to stop';
+  }catch(e){
+    console.error('Voice recording failed', e);
+    alert('Could not access the microphone. Check app permissions in phone Settings.');
+  }
+}
+
+let pendingEntryPhoto = null;
+async function attachEntryPhoto(){
+  const dataUrl = await capturePhoto();
+  if(!dataUrl) return;
+  pendingEntryPhoto = dataUrl;
+  updateEntryAttachmentPreviews();
+}
+
+function removeEntryPhoto(){ pendingEntryPhoto = null; updateEntryAttachmentPreviews(); }
+function removeEntryVoiceNote(){ pendingEntryVoiceNote = null; updateEntryAttachmentPreviews(); }
+
+function updateEntryAttachmentPreviews(){
+  const el = document.getElementById('entry-attachment-preview');
+  if(!el) return;
+  let html = '';
+  if(pendingEntryPhoto){
+    html += `<div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <img src="${pendingEntryPhoto}" style="width:48px; height:48px; border-radius:10px; object-fit:cover;">
+      <span style="font-size:12px; color:var(--txt-dim); flex:1;">Photo attached</span>
+      <button onclick="removeEntryPhoto()" style="background:none; border:none; color:var(--red); cursor:pointer;">✕</button>
+    </div>`;
+  }
+  if(pendingEntryVoiceNote){
+    html += `<div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <audio controls src="${pendingEntryVoiceNote}" style="height:36px; flex:1;"></audio>
+      <button onclick="removeEntryVoiceNote()" style="background:none; border:none; color:var(--red); cursor:pointer;">✕</button>
+    </div>`;
+  }
+  el.innerHTML = html;
+}
+
+// ===== Voice notes: uses the browser's built-in MediaRecorder (no extra native
+// plugin needed) — works fully offline since it's just recording to a local file,
+// no cloud speech service involved (unlike the "Speak this entry" voice-to-text feature). =====
+let voiceRecorder = null;
+let voiceRecorderChunks = [];
+let pendingEntryVoiceNote = null;
+let isRecordingVoiceNote = false;
+
+async function toggleEntryVoiceNoteRecording(){
+  const btn = document.getElementById('entry-voice-note-btn');
+  if(isRecordingVoiceNote){
+    voiceRecorder.stop();
+    isRecordingVoiceNote = false;
+    btn.textContent = '🎤 Voice note';
+    return;
+  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    alert('Voice recording is not supported on this device/browser.');
+    return;
+  }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    voiceRecorder = new MediaRecorder(stream);
+    voiceRecorderChunks = [];
+    voiceRecorder.ondataavailable = (e)=>{ if(e.data.size > 0) voiceRecorderChunks.push(e.data); };
+    voiceRecorder.onstop = ()=>{
+      const blob = new Blob(voiceRecorderChunks, { type: 'audio/webm' });
+      const reader = new FileReader();
+      reader.onloadend = ()=>{
+        pendingEntryVoiceNote = reader.result;
+        updateEntryAttachmentPreviews();
+      };
+      reader.readAsDataURL(blob);
+      stream.getTracks().forEach(t=>t.stop());
+    };
+    voiceRecorder.start();
+    isRecordingVoiceNote = true;
+    btn.textContent = '⏺ Recording… tap to stop';
+  }catch(e){
+    console.error('Voice recording failed', e);
+    alert('Could not access the microphone. Check app permissions in phone Settings.');
+  }
+}
+
 // ===== Real device contacts picker (customers screen) =====
 function getContactsPlugin(){
   return (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Contacts) || null;
@@ -1601,6 +2413,8 @@ async function pickFromContacts(){
     document.getElementById('ac-screen-title').textContent = 'Add Customer';
     document.getElementById('ac-save-btn').textContent = 'Save Customer';
     resetAddCustomerForm();
+    resetCustomerPhotoPreview();
+    resetCustomerNoteAttachments();
     document.getElementById('ac-name').value = name;
     document.getElementById('ac-phone').value = phone;
     setOpenMode('give');
@@ -1708,6 +2522,7 @@ async function bootApp(){
   initStatusBar();
   initLanguage();
   restoreNotifSwitchState();
+  initCurrencySelect();
 
   // 4. Real "stay logged in" — skip splash/onboarding/login entirely if the
   //    person already has an account and a valid session on this device.
